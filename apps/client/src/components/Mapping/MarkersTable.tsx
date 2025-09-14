@@ -1,11 +1,5 @@
 import './MarkersTable.css';
-import {
-  ArrowDown,
-  ArrowDownAZ,
-  ArrowUp,
-  ArrowUpAZ,
-  Trash2,
-} from 'lucide-react';
+import { ArrowDown, ArrowUp, Trash2 } from 'lucide-react';
 
 const MarkersTable = ({
   markers,

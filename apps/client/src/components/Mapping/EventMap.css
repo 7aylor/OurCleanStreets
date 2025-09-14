@@ -1,0 +1,9 @@
+.event-map-container {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 2fr 1fr;
+}
+.event-panel {
+  background-color: rgb(244, 244, 244);
+  padding: 5px;
+}

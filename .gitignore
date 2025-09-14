@@ -23,3 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 *.env*
+# Ignore node_modules anywhere in apps/
+apps/**/node_modules/
+
+# Ignore Vite cache folders anywhere in apps/
+apps/**/.vite/
+
+# Ignore build output folders
+apps/**/dist/

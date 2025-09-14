@@ -6,14 +6,17 @@ import {
   Popup,
   Polyline,
 } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
+import './EventMap.css';
 import Openrouteservice from 'openrouteservice-js';
-import ClickToAddMarkers from './ClickToAddMarkers';
+import ClickToAddMarkers from './ClickToAddMarkers.tsx';
 import polyline from '@mapbox/polyline';
 import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { primaryColors as colors, type NamedColor } from '../types/types.d.ts';
+import {
+  primaryColors as colors,
+  type NamedColor,
+} from '../../types/types.d.ts';
 import MarkersTable from './MarkersTable.tsx';
+import 'leaflet/dist/leaflet.css';
 
 let orsDirections = new Openrouteservice.Directions({
   api_key: import.meta.env.VITE_OSR_API_KEY,
@@ -41,7 +44,7 @@ const createNumberedIcon = (color: NamedColor, number: number) =>
     iconAnchor: [15, 15], // bottom-center
   });
 
-const SimpleMap = () => {
+const EventMap = () => {
   const [markers, setMarkers] = useState<ICoordinate[]>([]);
   const [route, setRoute] = useState<RouteCoordinates>([]);
 
@@ -155,13 +158,9 @@ const SimpleMap = () => {
   };
 
   return (
-    <>
+    <div className='event-map-container'>
       {location && (
-        <MapContainer
-          center={location}
-          zoom={20}
-          style={{ height: '500px', width: '100%' }}
-        >
+        <MapContainer center={location} zoom={20} style={{ height: '50vh' }}>
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
@@ -185,14 +184,16 @@ const SimpleMap = () => {
           <Polyline positions={route} weight={8} color='green' />
         </MapContainer>
       )}
-      <button onClick={onCalculate}>Calculate</button>
-      <MarkersTable
-        markers={markers}
-        removeMarker={removeMarker}
-        moveMarker={moveMarker}
-      />
-    </>
+      <div class='event-panel'>
+        <MarkersTable
+          markers={markers}
+          removeMarker={removeMarker}
+          moveMarker={moveMarker}
+        />
+        <button onClick={onCalculate}>Calculate Route</button>
+      </div>
+    </div>
   );
 };
 
-export default SimpleMap;
+export default EventMap;
