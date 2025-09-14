@@ -13,7 +13,11 @@
   padding: 0;
 }
 
-.markers-table .remove-marker:hover {
+.markers-table .hover:hover {
   cursor: pointer;
   color: blue;
+}
+
+.markers-table .disabled {
+  color: lightgray;
 }

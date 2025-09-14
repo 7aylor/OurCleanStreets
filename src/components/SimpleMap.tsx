@@ -126,6 +126,28 @@ const SimpleMap = () => {
     setMarkers((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const moveMarker = (index: number, dir: 'up' | 'down') => {
+    setMarkers((prev) => {
+      const newMarkers = [...prev]; // copy array
+
+      if (dir === 'up' && index > 0) {
+        // swap with the previous marker
+        [newMarkers[index - 1], newMarkers[index]] = [
+          newMarkers[index],
+          newMarkers[index - 1],
+        ];
+      } else if (dir === 'down' && index < newMarkers.length - 1) {
+        // swap with the next marker
+        [newMarkers[index], newMarkers[index + 1]] = [
+          newMarkers[index + 1],
+          newMarkers[index],
+        ];
+      }
+
+      return newMarkers;
+    });
+  };
+
   const onCalculate = () => {
     if (markers.length > 1) {
       getCoordinates(markers);
@@ -164,7 +186,11 @@ const SimpleMap = () => {
         </MapContainer>
       )}
       <button onClick={onCalculate}>Calculate</button>
-      <MarkersTable markers={markers} removeMarker={removeMarker} />
+      <MarkersTable
+        markers={markers}
+        removeMarker={removeMarker}
+        moveMarker={moveMarker}
+      />
     </>
   );
 };
