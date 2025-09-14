@@ -10,10 +10,29 @@ import 'leaflet/dist/leaflet.css';
 import Openrouteservice from 'openrouteservice-js';
 import ClickToAddMarkers from './ClickToAddMarkers';
 import polyline from '@mapbox/polyline';
+import MarkersList from './MarkersList';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 let orsDirections = new Openrouteservice.Directions({
   api_key: import.meta.env.VITE_OSR_API_KEY,
 });
+
+const colors = ['red', 'blue', 'green', 'orange', 'purple', 'teal'];
+
+const createColoredIcon = (color) =>
+  new L.DivIcon({
+    className: 'custom-marker',
+    html: `<div style="
+      background-color: ${color};
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid white;
+    "></div>`,
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+  });
 
 const SimpleMap = () => {
   const [markers, setMarkers] = useState([]);
@@ -45,6 +64,7 @@ const SimpleMap = () => {
 
   // Toggle when the map is clicked
   const handleMapClick = (latlng) => {
+    console.log(latlng);
     setMarkers((prev) => {
       const exists = prev.some(
         (marker) => marker.lat === latlng.lat && marker.lng === latlng.lng
@@ -92,6 +112,7 @@ const SimpleMap = () => {
             eventHandlers={{
               click: () => handleMarkerClick(index),
             }}
+            icon={createColoredIcon(colors[index % colors.length])}
           >
             <Popup>Marker {index + 1}</Popup>
           </Marker>
@@ -99,6 +120,7 @@ const SimpleMap = () => {
         <Polyline positions={route} color='green' />
       </MapContainer>
       <button onClick={onCalculate}>Calculate</button>
+      <MarkersList markers={markers} />
     </>
   );
 };
