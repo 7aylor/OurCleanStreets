@@ -13,6 +13,7 @@
     "@mapbox/polyline": "^1.2.1",
     "leaflet": "^1.9.4",
     "leaflet-routing-machine": "^3.2.12",
+    "lucide-react": "^0.544.0",
     "mapbox-gl": "^3.14.0",
     "ol": "^10.6.1",
     "openrouteservice-js": "^0.4.1",

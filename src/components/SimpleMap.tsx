@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   MapContainer,
   TileLayer,
@@ -10,33 +10,68 @@ import 'leaflet/dist/leaflet.css';
 import Openrouteservice from 'openrouteservice-js';
 import ClickToAddMarkers from './ClickToAddMarkers';
 import polyline from '@mapbox/polyline';
-import MarkersList from './MarkersList';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { primaryColors as colors, type NamedColor } from '../types/types.d.ts';
+import MarkersTable from './MarkersTable.tsx';
 
 let orsDirections = new Openrouteservice.Directions({
   api_key: import.meta.env.VITE_OSR_API_KEY,
 });
 
-const colors = ['red', 'blue', 'green', 'orange', 'purple', 'teal'];
-
-const createColoredIcon = (color) =>
+const createNumberedIcon = (color: NamedColor, number: number) =>
   new L.DivIcon({
     className: 'custom-marker',
     html: `<div style="
       background-color: ${color};
+      color: white;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       width: 20px;
       height: 20px;
       border-radius: 50%;
       border: 2px solid white;
-    "></div>`,
-    iconSize: [20, 20],
-    iconAnchor: [10, 10],
+      font-size: 14px;
+    ">
+      ${number}
+    </div>`,
+    iconSize: [30, 30],
+    iconAnchor: [15, 15], // bottom-center
   });
 
 const SimpleMap = () => {
-  const [markers, setMarkers] = useState([]);
-  const [route, setRoute] = useState([]);
+  const [markers, setMarkers] = useState<ICoordinate[]>([]);
+  const [route, setRoute] = useState<RouteCoordinates>([]);
+
+  const [location, setLocation] = useState<RouteCoordinate | null>();
+  const [error, setError] = useState<string | null>(null);
+
+  const getLocation = () => {
+    if (!navigator?.geolocation) {
+      setError('Geolocation is not supported by your browser');
+      console.log('Geolocation is not supported by your browser');
+      setLocation([33.424564, -111.928001]); // Default to ASU lat/lng
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLocation([position.coords.latitude, position.coords.longitude]);
+        setError(null);
+      },
+      (err) => {
+        setError(err.message);
+        console.log(err.message);
+        setLocation([33.424564, -111.928001]);
+      }
+    );
+  };
+
+  useEffect(() => {
+    getLocation();
+  }, []);
 
   const getCoordinates = async (coords: ICoordinate[]) => {
     console.log('getting route coordinates');
@@ -54,16 +89,20 @@ const SimpleMap = () => {
 
     console.log('response: ', response);
 
-    const decodedPolyCoords = polyline.decode(response.routes[0].geometry);
+    const decodedPolyCoords: RouteCoordinates = polyline.decode(
+      response.routes[0].geometry
+    );
 
     // Leaflet expects [lat, lng], polyline.decode returns [lat, lng] already
     // but OpenRouteService uses [lon, lat] internally, so we’re safe here
-    const routeCoords = decodedPolyCoords.map(([lat, lng]) => [lat, lng]);
+    const routeCoords: RouteCoordinates = decodedPolyCoords.map(
+      ([lat, lng]) => [lat, lng]
+    );
     setRoute(routeCoords);
   };
 
   // Toggle when the map is clicked
-  const handleMapClick = (latlng) => {
+  const handleMapClick = (latlng: ICoordinate) => {
     console.log(latlng);
     setMarkers((prev) => {
       const exists = prev.some(
@@ -83,7 +122,7 @@ const SimpleMap = () => {
   };
 
   // Remove marker when the marker itself is clicked
-  const handleMarkerClick = (index: number) => {
+  const removeMarker = (index: number) => {
     setMarkers((prev) => prev.filter((_, i) => i !== index));
   };
 
@@ -95,32 +134,37 @@ const SimpleMap = () => {
 
   return (
     <>
-      <MapContainer
-        center={[44.05207, -123.08675]}
-        zoom={20}
-        style={{ height: '500px', width: '100%' }}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-        />
-        <ClickToAddMarkers onMapClick={handleMapClick} />
-        {markers.map((position, index) => (
-          <Marker
-            key={index}
-            position={position}
-            eventHandlers={{
-              click: () => handleMarkerClick(index),
-            }}
-            icon={createColoredIcon(colors[index % colors.length])}
-          >
-            <Popup>Marker {index + 1}</Popup>
-          </Marker>
-        ))}
-        <Polyline positions={route} color='green' />
-      </MapContainer>
+      {location && (
+        <MapContainer
+          center={location}
+          zoom={20}
+          style={{ height: '500px', width: '100%' }}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+          />
+          <ClickToAddMarkers onMapClick={handleMapClick} />
+          {markers.map((position, index) => (
+            <Marker
+              key={index}
+              position={position}
+              eventHandlers={{
+                click: () => removeMarker(index),
+              }}
+              icon={createNumberedIcon(
+                colors[index % colors.length],
+                index + 1
+              )}
+            >
+              <Popup>Marker {index + 1}</Popup>
+            </Marker>
+          ))}
+          <Polyline positions={route} weight={8} color='green' />
+        </MapContainer>
+      )}
       <button onClick={onCalculate}>Calculate</button>
-      <MarkersList markers={markers} />
+      <MarkersTable markers={markers} removeMarker={removeMarker} />
     </>
   );
 };
