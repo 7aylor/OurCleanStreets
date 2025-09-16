@@ -184,4 +184,4 @@ export const primaryColors: NamedColor[] = [
   'purple',
 ];
 
-export type NamedColor = (typeof allNamedColors)[number];
+export type NamedColor = (typeof colors)[number];

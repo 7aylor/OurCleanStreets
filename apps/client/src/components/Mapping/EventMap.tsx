@@ -7,14 +7,14 @@ import {
   Polyline,
 } from 'react-leaflet';
 import './EventMap.css';
+// @ts-ignore
 import Openrouteservice from 'openrouteservice-js';
 import ClickToAddMarkers from './ClickToAddMarkers.tsx';
+// @ts-ignore
 import polyline from '@mapbox/polyline';
+// @ts-ignore
 import L from 'leaflet';
-import {
-  primaryColors as colors,
-  type NamedColor,
-} from '../../types/types.d.ts';
+import { primaryColors as colors, type NamedColor } from '../../types/types.ts';
 import MarkersTable from './MarkersTable.tsx';
 import 'leaflet/dist/leaflet.css';
 
@@ -49,7 +49,7 @@ const EventMap = () => {
   const [route, setRoute] = useState<RouteCoordinates>([]);
 
   const [location, setLocation] = useState<RouteCoordinate | null>();
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
 
   const getLocation = () => {
     if (!navigator?.geolocation) {
@@ -83,7 +83,7 @@ const EventMap = () => {
       coord.lng,
       coord.lat,
     ]);
-    console.log(coordsArr);
+    // TODO: Move this to API to proxy call to ORS and protect API key
     let response = await orsDirections.calculate({
       coordinates: coordsArr,
       profile: 'foot-walking',
@@ -160,8 +160,10 @@ const EventMap = () => {
   return (
     <div className='event-map-container'>
       {location && (
+        // @ts-ignore
         <MapContainer center={location} zoom={20} style={{ height: '50vh' }}>
           <TileLayer
+            // @ts-ignore
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
           />
@@ -173,6 +175,7 @@ const EventMap = () => {
               eventHandlers={{
                 click: () => removeMarker(index),
               }}
+              // @ts-ignore
               icon={createNumberedIcon(
                 colors[index % colors.length],
                 index + 1
@@ -181,10 +184,16 @@ const EventMap = () => {
               <Popup>Marker {index + 1}</Popup>
             </Marker>
           ))}
-          <Polyline positions={route} weight={8} color='green' />
+          <Polyline
+            positions={route}
+            // @ts-ignore
+            weight={8}
+            color='green'
+          />
         </MapContainer>
       )}
-      <div class='event-panel'>
+
+      <div className='event-panel'>
         <MarkersTable
           markers={markers}
           removeMarker={removeMarker}

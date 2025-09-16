@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@mapbox/polyline": "^1.2.1",
+    "@reduxjs/toolkit": "^2.9.0",
     "leaflet": "^1.9.4",
     "leaflet-routing-machine": "^3.2.12",
     "lucide-react": "^0.544.0",
@@ -20,7 +21,9 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-leaflet": "^5.0.0-rc.2",
-    "react-openlayers": "^10.5.0"
+    "react-openlayers": "^10.5.0",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.9.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
