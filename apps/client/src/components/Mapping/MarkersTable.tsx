@@ -23,7 +23,7 @@ const MarkersTable = ({
                 className={`${index === 0 ? 'disabled' : 'hover'}`}
                 onClick={index > 0 ? () => moveMarker(index, 'up') : undefined}
               >
-                <ArrowUp />
+                <ArrowUp className='markers-cell-up' />
               </td>
               <td
                 className={`${
@@ -35,13 +35,13 @@ const MarkersTable = ({
                     : undefined
                 }
               >
-                <ArrowDown />
+                <ArrowDown className='markers-cell-down' />
               </td>
               <td
                 onClick={() => removeMarker(index)}
                 className='remove-marker hover'
               >
-                <Trash2 size='16' />
+                <Trash2 size='16' className='markers-cell-delete' />
               </td>
             </tr>
           ))}

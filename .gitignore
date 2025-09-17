@@ -31,3 +31,4 @@ apps/**/.vite/
 
 # Ignore build output folders
 apps/**/dist/
+coverage
