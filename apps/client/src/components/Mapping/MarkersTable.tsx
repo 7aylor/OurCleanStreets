@@ -1,3 +1,4 @@
+import type { ICoordinate } from '@ocs/types';
 import './MarkersTable.css';
 import { ArrowDown, ArrowUp, Trash2 } from 'lucide-react';
 

@@ -7,20 +7,17 @@ import {
   Polyline,
 } from 'react-leaflet';
 import './EventMap.css';
-// @ts-ignore
-import Openrouteservice from 'openrouteservice-js';
 import ClickToAddMarkers from './ClickToAddMarkers.tsx';
-// @ts-ignore
-import polyline from '@mapbox/polyline';
 // @ts-ignore
 import L from 'leaflet';
 import { primaryColors as colors, type NamedColor } from '../../types/types.ts';
 import MarkersTable from './MarkersTable.tsx';
 import 'leaflet/dist/leaflet.css';
-
-let orsDirections = new Openrouteservice.Directions({
-  api_key: import.meta.env.VITE_OSR_API_KEY,
-});
+import type {
+  ICoordinate,
+  RouteCoordinate,
+  RouteCoordinates,
+} from '@ocs/types';
 
 const createNumberedIcon = (color: NamedColor, number: number) =>
   new L.DivIcon({
@@ -83,25 +80,19 @@ const EventMap = () => {
       coord.lng,
       coord.lat,
     ]);
-    // TODO: Move this to API to proxy call to ORS and protect API key
-    let response = await orsDirections.calculate({
-      coordinates: coordsArr,
-      profile: 'foot-walking',
-      format: 'json',
+
+    let response = await fetch('http://localhost:5000/get-route', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ coordinates: coordsArr }),
     });
 
-    console.log('response: ', response);
-
-    const decodedPolyCoords: RouteCoordinates = polyline.decode(
-      response.routes[0].geometry
-    );
-
-    // Leaflet expects [lat, lng], polyline.decode returns [lat, lng] already
-    // but OpenRouteService uses [lon, lat] internally, so we’re safe here
-    const routeCoords: RouteCoordinates = decodedPolyCoords.map(
-      ([lat, lng]) => [lat, lng]
-    );
-    setRoute(routeCoords);
+    if (response.ok) {
+      const routeCoords: RouteCoordinates = await response.json();
+      setRoute(routeCoords);
+    }
   };
 
   // Toggle when the map is clicked

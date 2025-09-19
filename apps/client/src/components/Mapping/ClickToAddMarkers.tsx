@@ -1,4 +1,5 @@
 import { useMapEvents } from 'react-leaflet';
+import type { ICoordinate } from '@ocs/types';
 
 function ClickToAddMarkers({
   onMapClick,
