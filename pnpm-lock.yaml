@@ -116,9 +116,6 @@ importers:
       '@mapbox/polyline':
         specifier: ^1.2.1
         version: 1.2.1
-      '@ocs/types':
-        specifier: workspace:*
-        version: link:../types
       '@prisma/client':
         specifier: ^6.16.2
         version: 6.16.2(prisma@6.16.2(magicast@0.3.5)(typescript@5.9.2))(typescript@5.9.2)
@@ -135,6 +132,9 @@ importers:
         specifier: ^6.16.2
         version: 6.16.2(magicast@0.3.5)(typescript@5.9.2)
     devDependencies:
+      '@ocs/types':
+        specifier: workspace:*
+        version: link:../types
       '@types/express':
         specifier: ^5.0.3
         version: 5.0.3
@@ -151,11 +151,7 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
-  apps/types:
-    dependencies:
-      typescript:
-        specifier: ^5.9.2
-        version: 5.9.2
+  apps/types: {}
 
 packages:
 

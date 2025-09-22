@@ -3,9 +3,9 @@
 ## Deployment process
 
 - make change
-- from root:
-  - docker build -f apps/server/Dockerfile -t forkedupduck/ocs-server:latest .
-  - docker push forkedupduck/ocs-server:latest
+- from root (needed to pull in types package):
+  - docker build -f apps/server/Dockerfile -t forkedupduck/ocs-server:{version} .
+  - docker push forkedupduck/ocs-server:{version}
   - Deploy from Azure Container App -> Application -> containers -> update image tag
 
 ## Environment Variables
