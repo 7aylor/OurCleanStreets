@@ -81,7 +81,12 @@ const EventMap = () => {
       coord.lat,
     ]);
 
-    let response = await fetch('http://localhost:5000/get-route', {
+    const ocsServerUrl =
+      import.meta.env.VITE_OCS_API_URL ?? 'http://localhost:5000';
+
+    console.log(ocsServerUrl);
+
+    let response = await fetch(`${ocsServerUrl}/get-route`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
