@@ -13,7 +13,7 @@ const port = 5000;
 
 const allowedOrigins = [
   'http://localhost:5174',
-  'https://agreeable-forest-01a6d8e0f.2.azurestaticapps.net/',
+  'https://agreeable-forest-01a6d8e0f.2.azurestaticapps.net',
 ];
 
 app.use(

@@ -74,8 +74,6 @@ const EventMap = () => {
   }, []);
 
   const getCoordinates = async (coords: ICoordinate[]) => {
-    console.log('getting route coordinates');
-
     const coordsArr = coords.map((coord: ICoordinate) => [
       coord.lng,
       coord.lat,
@@ -83,8 +81,6 @@ const EventMap = () => {
 
     const ocsServerUrl =
       import.meta.env.VITE_OCS_API_URL ?? 'http://localhost:5000';
-
-    console.log(ocsServerUrl);
 
     let response = await fetch(`${ocsServerUrl}/get-route`, {
       method: 'POST',
@@ -102,7 +98,6 @@ const EventMap = () => {
 
   // Toggle when the map is clicked
   const handleMapClick = (latlng: ICoordinate) => {
-    console.log(latlng);
     setMarkers((prev) => {
       const exists = prev.some(
         (marker) => marker.lat === latlng.lat && marker.lng === latlng.lng
