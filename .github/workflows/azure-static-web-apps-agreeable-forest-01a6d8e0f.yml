@@ -28,7 +28,7 @@ jobs:
           pnpm -F client build
 
       - name: Copy routes config
-         run: |
+        run: |
           mkdir -p apps/client/dist
           cp apps/client/routes.json apps/client/dist/
 
