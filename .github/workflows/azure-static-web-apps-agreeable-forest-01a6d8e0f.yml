@@ -24,6 +24,7 @@ jobs:
 
       - name: Build
         run: |
+          VITE_API_URL=https://ocs-server.ashybay-482f42bc.eastus2.azurecontainerapps.io \
           pnpm -F @ocs/types build
           pnpm -F ocs-client build
 
