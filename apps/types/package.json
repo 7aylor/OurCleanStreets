@@ -2,12 +2,5 @@
   "name": "@ocs/types",
   "version": "1.0.0",
   "description": "shared types for OCS monorepo",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "tsc"
-  },
-  "dependencies": {
-    "typescript": "^5.9.2"
-  }
+  "types": "index.ts"
 }

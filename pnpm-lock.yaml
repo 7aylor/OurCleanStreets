@@ -13,9 +13,6 @@ importers:
       '@mapbox/polyline':
         specifier: ^1.2.1
         version: 1.2.1
-      '@ocs/types':
-        specifier: workspace:*
-        version: link:../types
       '@reduxjs/toolkit':
         specifier: ^2.9.0
         version: 2.9.0(react-redux@9.2.0(@types/react@19.1.13)(react@19.1.1)(redux@5.0.1))(react@19.1.1)
@@ -53,6 +50,9 @@ importers:
       '@eslint/js':
         specifier: ^9.33.0
         version: 9.35.0
+      '@ocs/types':
+        specifier: workspace:*
+        version: link:../types
       '@testing-library/dom':
         specifier: ^10.4.1
         version: 10.4.1

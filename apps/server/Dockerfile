@@ -1,14 +1,27 @@
 FROM node:20-alpine
 
+# Enable corepack so pnpm is available
+RUN corepack enable
+
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
+
+# Copy only root manifest + lockfile first (better layer caching)
+COPY package.json pnpm-lock.yaml ./
+
+# Copy the workspaces you need
+COPY apps/server ./apps/server
+COPY apps/types ./apps/types
+
+# Install only the deps needed for server (resolves workspace: correctly)
+RUN pnpm install --filter ./apps/server...
+
+WORKDIR /app/apps/server
 
 # Generate Prisma client
-RUN npx prisma generate
+RUN pnpm exec prisma generate
 
-RUN npm run build
+# Build server
+RUN pnpm build
 
 EXPOSE 5000
 CMD ["node", "dist/index.js"]

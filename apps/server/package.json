@@ -13,7 +13,6 @@
   "license": "MIT",
   "dependencies": {
     "@mapbox/polyline": "^1.2.1",
-    "@ocs/types": "workspace:*",
     "@prisma/client": "^6.16.2",
     "cors": "^2.8.5",
     "express": "^5.1.0",
@@ -21,6 +20,7 @@
     "prisma": "^6.16.2"
   },
   "devDependencies": {
+    "@ocs/types": "workspace:*",
     "@types/express": "^5.0.3",
     "@types/node": "^24.4.0",
     "ts-node": "^10.9.2",
