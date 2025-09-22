@@ -25,11 +25,10 @@ jobs:
       - name: Build
         run: |
           pnpm -F @ocs/types build
-          pnpm -F client build
+          pnpm -F ocs-client build
 
       - name: Copy routes config
-        run: |
-          cp apps/client/routes.json apps/client/dist/
+        run: cp apps/client/routes.json apps/client/dist/
 
       - name: List dist folder
         run: ls -R apps/client/dist
