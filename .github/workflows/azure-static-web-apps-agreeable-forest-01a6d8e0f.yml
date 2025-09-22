@@ -27,8 +27,8 @@ jobs:
           pnpm -F @ocs/types build
           pnpm -F ocs-client build
 
-      - name: Copy routes config
-        run: cp apps/client/routes.json apps/client/dist/
+      - name: Copy SWA config
+        run: cp apps/client/staticwebapp.config.json apps/client/dist/
 
       - name: List dist folder
         run: ls -R apps/client/dist
