@@ -28,7 +28,9 @@ jobs:
           pnpm -F client build
 
       - name: Copy routes config
-        run: cp apps/client/routes.json apps/client/dist/
+         run: |
+          mkdir -p apps/client/dist
+          cp apps/client/routes.json apps/client/dist/
 
       - name: Deploy
         uses: Azure/static-web-apps-deploy@v1
