@@ -16,4 +16,7 @@ export default defineConfig({
       include: ['src/**/*.{ts,tsx}'], // only include source files
     },
   },
+  build: {
+    outDir: 'dist',
+  },
 });

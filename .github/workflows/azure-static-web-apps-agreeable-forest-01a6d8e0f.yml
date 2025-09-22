@@ -29,7 +29,6 @@ jobs:
 
       - name: Copy routes config
         run: |
-          mkdir -p apps/client/dist
           cp apps/client/routes.json apps/client/dist/
 
       - name: List dist folder
