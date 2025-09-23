@@ -18,6 +18,7 @@ import type {
   RouteCoordinate,
   RouteCoordinates,
 } from '@ocs/types';
+import { LoaderCircle } from 'lucide-react';
 
 const createNumberedIcon = (color: NamedColor, number: number) =>
   new L.DivIcon({
@@ -47,6 +48,7 @@ const EventMap = () => {
 
   const [location, setLocation] = useState<RouteCoordinate | null>();
   const [, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const getLocation = () => {
     if (!navigator?.geolocation) {
@@ -74,6 +76,7 @@ const EventMap = () => {
   }, []);
 
   const getCoordinates = async (coords: ICoordinate[]) => {
+    setLoading(true);
     const coordsArr = coords.map((coord: ICoordinate) => [
       coord.lng,
       coord.lat,
@@ -94,6 +97,7 @@ const EventMap = () => {
       const routeCoords: RouteCoordinates = await response.json();
       setRoute(routeCoords);
     }
+    setLoading(false);
   };
 
   // Toggle when the map is clicked
@@ -151,8 +155,12 @@ const EventMap = () => {
   return (
     <div className='event-map-container'>
       {location && (
-        // @ts-ignore
-        <MapContainer center={location} zoom={20} style={{ height: '50vh' }}>
+        <MapContainer
+          // @ts-ignore
+          center={location}
+          zoom={20}
+          style={{ height: '50vh' }}
+        >
           <TileLayer
             // @ts-ignore
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -190,7 +198,19 @@ const EventMap = () => {
           removeMarker={removeMarker}
           moveMarker={moveMarker}
         />
-        <button onClick={onCalculate}>Calculate Route</button>
+        <div className='flex items-center gap-1'>
+          <button
+            onClick={onCalculate}
+            className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l'
+          >
+            Calculate Route
+          </button>
+          {loading && <LoaderCircle className='animate-spin' />}
+        </div>
+        <p>
+          Please note that during development, the first API call may take a
+          while due to dev server limitations.
+        </p>
       </div>
     </div>
   );
