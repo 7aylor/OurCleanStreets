@@ -85,7 +85,7 @@ const EventMap = () => {
     const ocsServerUrl =
       import.meta.env.VITE_OCS_API_URL ?? 'http://localhost:5000';
 
-    let response = await fetch(`${ocsServerUrl}/get-route`, {
+    let response = await fetch(`${ocsServerUrl}/map/get-route`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
