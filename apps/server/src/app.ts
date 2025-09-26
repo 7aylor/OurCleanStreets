@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import mapRoutes from './routes/mapRoutes';
 import booksRoutes from './routes/booksRoutes';
+import authRoutes from './routes/authRoutes';
 
 const app = express();
 
@@ -10,6 +11,8 @@ const allowedOrigins = [
   'http://localhost:5174',
   'https://agreeable-forest-01a6d8e0f.2.azurestaticapps.net',
 ];
+
+app.use(express.json());
 
 app.use(
   cors({
@@ -24,8 +27,7 @@ app.use(
   })
 );
 
-app.use(express.json());
-
+app.use('/auth', authRoutes);
 app.use('/map', mapRoutes);
 app.use('/books', booksRoutes);
 

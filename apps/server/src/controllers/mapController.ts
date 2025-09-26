@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
 // @ts-ignore
 import polyline from '@mapbox/polyline';
-import { RouteCoordinates } from '@ocs/types';
+import { ICoordinate, RouteCoordinates } from '@ocs/types';
 import { getOrsDirections } from '../utils/ors';
 
-type Coordinate = { lat: number; lng: number };
 interface CoordsRequestBody {
-  coordinates: Coordinate[];
+  coordinates: ICoordinate[];
 }
 
 export const getRoute = async (

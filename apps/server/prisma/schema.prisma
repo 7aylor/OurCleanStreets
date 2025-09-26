@@ -4,11 +4,19 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("ocs-db")
+  url      = env("OCS_DB")
 }
 
 model books {
   id     Int    @id(map: "test_pk")
   title  String @db.VarChar
   author String @db.VarChar
+}
+
+model Users {
+  id             String          @id @default(uuid())
+  email          String          @unique
+  passwordHash   String
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 }

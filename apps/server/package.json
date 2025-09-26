@@ -19,7 +19,8 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "openrouteservice-js": "^0.4.1",
-    "prisma": "^6.16.2"
+    "prisma": "^6.16.2",
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "@ocs/types": "workspace:*",
