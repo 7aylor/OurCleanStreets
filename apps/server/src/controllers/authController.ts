@@ -3,19 +3,69 @@ import bcrypt from 'bcryptjs';
 import { getPrismaClient } from '../utils/prisma';
 import { IUser } from '@ocs/types';
 import { userSchema } from '../utils/zod-schemas';
+import { createAccessToken, createRefreshToken } from '../utils/auth';
 
 export const login = async (_req: Request<{}, {}, IUser>, res: Response) => {
   try {
     const prisma = getPrismaClient();
-    const { email, password } = _req.body;
+    const user = _req.body;
 
-    const hash = await bcrypt.hash(password ?? '', process.env.SALT_ITR ?? 10);
+    const parseResult = userSchema.safeParse(user);
 
-    const user = prisma.users.findUnique({
-      where: { email: email, passwordHash: hash },
+    if (!parseResult.success) {
+      return res.status(400).json({
+        success: false,
+        errors: parseResult.error.issues.map((err) => err.message),
+      });
+    }
+
+    const { email, password } = parseResult.data;
+
+    const foundUser = await prisma.user.findUnique({
+      where: { email: email },
+    });
+
+    const LOGIN_ERROR = 'Login Failed. Invalid credentials or user not found';
+
+    if (!foundUser) {
+      return res.status(401).json({
+        success: false,
+        message: LOGIN_ERROR,
+      });
+    }
+
+    const validPassword = await bcrypt.compare(
+      password,
+      foundUser.passwordHash
+    );
+
+    if (!validPassword) {
+      return res.status(401).json({ success: false, message: LOGIN_ERROR });
+    }
+
+    const accessToken = createAccessToken(foundUser.id);
+    const refreshToken = await createRefreshToken(foundUser.id);
+
+    // Send refresh token in httpOnly cookie
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      // sameSite: 'strict',
+      // path: '/auth/refresh',
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Login successful',
+      user: { email: user.email },
+      accessToken,
     });
   } catch (error) {
     console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: `Login failed: Please try again.`,
+    });
   }
 };
 
@@ -35,18 +85,62 @@ export const signup = async (_req: Request<{}, {}, IUser>, res: Response) => {
 
     const { email, password } = parseResult.data;
 
-    const hash = await bcrypt.hash(password, process.env.SALT_ITR ?? 10);
+    const hash = await bcrypt.hash(
+      password,
+      Number(process.env.SALT_ITR) ?? 10
+    );
 
-    const newUser = await prisma.users.create({
+    const newUser = await prisma.user.create({
       data: { email, passwordHash: hash, updatedAt: new Date() },
     });
+
+    const token = createAccessToken(newUser.id);
 
     return res.status(201).json({
       success: true,
       message: 'Signup successful',
       user: { email: newUser.email },
+      token,
     });
   } catch (error) {
     console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: `Signup failed: Please try again`,
+    });
+  }
+};
+
+export const refresh = async (_req: Request<{}, {}, IUser>, res: Response) => {
+  const token = _req.cookies.refreshToken;
+  if (!token) return res.sendStatus(401);
+
+  const prisma = getPrismaClient();
+
+  const dbRefreshToken = await prisma.refreshToken.findUnique({
+    where: { token },
+  });
+  if (!dbRefreshToken || dbRefreshToken.expiresAt < new Date()) {
+    return res
+      .status(403)
+      .json({ message: 'Invalid or expired refresh token' });
+  }
+
+  const accessToken = createAccessToken(dbRefreshToken.userId);
+  res.json({ accessToken });
+};
+
+export const logout = async (_req: Request<{}, {}, IUser>, res: Response) => {
+  try {
+    const token = _req.cookies.refreshToken;
+    if (token) {
+      const prisma = getPrismaClient();
+      await prisma.refreshToken.deleteMany({ where: { token } });
+      res.clearCookie('refreshToken');
+    }
+    res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+    res.status(403).json({ message: 'Invalid refresh token' });
   }
 };

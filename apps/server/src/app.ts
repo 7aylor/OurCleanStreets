@@ -2,8 +2,9 @@ import express from 'express';
 // @ts-ignore
 import cors from 'cors';
 import mapRoutes from './routes/mapRoutes';
-import booksRoutes from './routes/booksRoutes';
 import authRoutes from './routes/authRoutes';
+// @ts-ignore
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
@@ -13,6 +14,7 @@ const allowedOrigins = [
 ];
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use(
   cors({
@@ -29,7 +31,6 @@ app.use(
 
 app.use('/auth', authRoutes);
 app.use('/map', mapRoutes);
-app.use('/books', booksRoutes);
 
 app.get('/', (_req, res) => {
   res.send('Hello World!');

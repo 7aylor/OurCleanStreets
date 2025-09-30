@@ -7,16 +7,24 @@ datasource db {
   url      = env("OCS_DB")
 }
 
-model books {
-  id     Int    @id(map: "test_pk")
-  title  String @db.VarChar
-  author String @db.VarChar
+model User {
+  id           String         @id @default(uuid())
+  email        String         @unique
+  passwordHash String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  RefreshToken RefreshToken[]
+
+  @@map("Users")
 }
 
-model Users {
-  id             String          @id @default(uuid())
-  email          String          @unique
-  passwordHash   String
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  @@map("RefreshTokens")
 }
