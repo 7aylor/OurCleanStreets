@@ -19,6 +19,7 @@ import type {
   RouteCoordinates,
 } from '@ocs/types';
 import { LoaderCircle } from 'lucide-react';
+import { OCS_API_URL } from '../../helpers/constants.ts';
 
 const createNumberedIcon = (color: NamedColor, number: number) =>
   new L.DivIcon({
@@ -82,10 +83,7 @@ const EventMap = () => {
       coord.lat,
     ]);
 
-    const ocsServerUrl =
-      import.meta.env.VITE_OCS_API_URL ?? 'http://localhost:5000';
-
-    let response = await fetch(`${ocsServerUrl}/map/get-route`, {
+    let response = await fetch(`${OCS_API_URL}/map/get-route`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

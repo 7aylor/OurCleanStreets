@@ -1,12 +1,34 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { OCS_API_URL } from '../../helpers/constants';
+import { logout } from '../../store/authSlice';
 
 const Navbar = () => {
   // @ts-ignore
-  const loggedIn = useSelector((state) => state.auth.loggedIn);
+  const loggedIn = useSelector((state) => !!state.auth.accessToken);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  console.log(loggedIn);
+  const onLogout = async () => {
+    const logoutUrl = `${OCS_API_URL}/auth/logout`;
+
+    try {
+      let response = await fetch(logoutUrl, {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        dispatch(logout());
+        navigate('/');
+      } else {
+        console.error('Logout failed:', await response.json());
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <div className='navbar'>
@@ -16,17 +38,22 @@ const Navbar = () => {
         </Link>
       </h1>
       <div>
-        <Link to='/map' className='m-2 hover:text-gray-300'>
-          Event Map
-        </Link>
         {!loggedIn && (
+          <Link to='/login' className='m-2 hover:text-gray-300'>
+            Login
+          </Link>
+        )}
+        {loggedIn && (
           <>
-            <Link to='/login' className='m-2 hover:text-gray-300'>
-              Login
+            <Link to='/map' className='m-2 hover:text-gray-300'>
+              Event Map
             </Link>
-            <Link to='/signup' className='m-2 hover:text-gray-300'>
-              Sign Up
-            </Link>
+            <button
+              onClick={onLogout}
+              className='m-2 hover:text-gray-300 hover:cursor-pointer'
+            >
+              Logout
+            </button>
           </>
         )}
       </div>

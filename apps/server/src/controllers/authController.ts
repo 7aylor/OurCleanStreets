@@ -49,9 +49,9 @@ export const login = async (_req: Request<{}, {}, IUser>, res: Response) => {
     // Send refresh token in httpOnly cookie
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: true,
-      // sameSite: 'strict',
-      // path: '/auth/refresh',
+      // secure: true,
+      sameSite: 'strict',
+      path: '/auth',
     });
 
     return res.status(200).json({
@@ -79,11 +79,24 @@ export const signup = async (_req: Request<{}, {}, IUser>, res: Response) => {
     if (!parseResult.success) {
       return res.status(400).json({
         success: false,
+        message: 'An error has occurred',
         errors: parseResult.error.issues.map((err) => err.message),
       });
     }
 
     const { email, password } = parseResult.data;
+
+    const foundUser = await prisma.user.findUnique({
+      where: { email: email },
+    });
+
+    if (foundUser) {
+      return res.status(400).json({
+        success: false,
+        message: 'An error has occurred',
+        errors: ['Signup failed, please try again'],
+      });
+    }
 
     const hash = await bcrypt.hash(
       password,
@@ -94,40 +107,54 @@ export const signup = async (_req: Request<{}, {}, IUser>, res: Response) => {
       data: { email, passwordHash: hash, updatedAt: new Date() },
     });
 
-    const token = createAccessToken(newUser.id);
+    const accessToken = createAccessToken(newUser.id);
+    const refreshToken = await createRefreshToken(newUser.id);
+
+    // Send refresh token in httpOnly cookie
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      path: '/auth',
+    });
 
     return res.status(201).json({
       success: true,
       message: 'Signup successful',
       user: { email: newUser.email },
-      token,
+      accessToken,
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
-      message: `Signup failed: Please try again`,
+      message: `Signup failed, please try again`,
     });
   }
 };
 
 export const refresh = async (_req: Request<{}, {}, IUser>, res: Response) => {
-  const token = _req.cookies.refreshToken;
-  if (!token) return res.sendStatus(401);
+  try {
+    const token = _req.cookies.refreshToken;
+    if (!token) return res.sendStatus(401);
 
-  const prisma = getPrismaClient();
+    const prisma = getPrismaClient();
 
-  const dbRefreshToken = await prisma.refreshToken.findUnique({
-    where: { token },
-  });
-  if (!dbRefreshToken || dbRefreshToken.expiresAt < new Date()) {
-    return res
-      .status(403)
-      .json({ message: 'Invalid or expired refresh token' });
+    const dbRefreshToken = await prisma.refreshToken.findUnique({
+      where: { token },
+    });
+    if (!dbRefreshToken || dbRefreshToken.expiresAt < new Date()) {
+      return res
+        .status(403)
+        .json({ message: 'Invalid or expired refresh token' });
+    }
+
+    const accessToken = createAccessToken(dbRefreshToken.userId);
+    res.json({ accessToken });
+  } catch (e) {
+    console.log(e);
+    res.status(403).json({ message: 'Invalid refresh token' });
   }
-
-  const accessToken = createAccessToken(dbRefreshToken.userId);
-  res.json({ accessToken });
 };
 
 export const logout = async (_req: Request<{}, {}, IUser>, res: Response) => {

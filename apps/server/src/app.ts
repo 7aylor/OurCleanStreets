@@ -9,6 +9,7 @@ import cookieParser from 'cookie-parser';
 const app = express();
 
 const allowedOrigins = [
+  'http://localhost:5173',
   'http://localhost:5174',
   'https://agreeable-forest-01a6d8e0f.2.azurestaticapps.net',
 ];
@@ -26,6 +27,7 @@ app.use(
         callback(new Error('Not allowed by CORS'));
       }
     },
+    credentials: true,
   })
 );
 
