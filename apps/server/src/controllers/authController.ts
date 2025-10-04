@@ -30,7 +30,7 @@ export const login = async (_req: Request<{}, {}, IUser>, res: Response) => {
     if (!foundUser) {
       return res.status(401).json({
         success: false,
-        message: LOGIN_ERROR,
+        errors: [LOGIN_ERROR],
       });
     }
 
@@ -40,7 +40,7 @@ export const login = async (_req: Request<{}, {}, IUser>, res: Response) => {
     );
 
     if (!validPassword) {
-      return res.status(401).json({ success: false, message: LOGIN_ERROR });
+      return res.status(401).json({ success: false, errors: [LOGIN_ERROR] });
     }
 
     const accessToken = createAccessToken(foundUser.id);
@@ -49,7 +49,7 @@ export const login = async (_req: Request<{}, {}, IUser>, res: Response) => {
     // Send refresh token in httpOnly cookie
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      // secure: true,
+      secure: true,
       sameSite: 'strict',
       path: '/auth',
     });
@@ -64,7 +64,7 @@ export const login = async (_req: Request<{}, {}, IUser>, res: Response) => {
     console.error(error);
     return res.status(500).json({
       success: false,
-      message: `Login failed: Please try again.`,
+      errors: [`Login failed: Please try again.`],
     });
   }
 };
@@ -128,7 +128,7 @@ export const signup = async (_req: Request<{}, {}, IUser>, res: Response) => {
     console.error(error);
     return res.status(500).json({
       success: false,
-      message: `Signup failed, please try again`,
+      errors: [`Signup failed, please try again`],
     });
   }
 };
@@ -142,6 +142,7 @@ export const refresh = async (_req: Request<{}, {}, IUser>, res: Response) => {
 
     const dbRefreshToken = await prisma.refreshToken.findUnique({
       where: { token },
+      include: { user: true },
     });
     if (!dbRefreshToken || dbRefreshToken.expiresAt < new Date()) {
       return res
@@ -150,10 +151,10 @@ export const refresh = async (_req: Request<{}, {}, IUser>, res: Response) => {
     }
 
     const accessToken = createAccessToken(dbRefreshToken.userId);
-    res.json({ accessToken });
+    res.json({ accessToken, email: dbRefreshToken.user.email });
   } catch (e) {
     console.log(e);
-    res.status(403).json({ message: 'Invalid refresh token' });
+    res.status(403).json({ errors: ['Invalid token'] });
   }
 };
 
@@ -163,11 +164,16 @@ export const logout = async (_req: Request<{}, {}, IUser>, res: Response) => {
     if (token) {
       const prisma = getPrismaClient();
       await prisma.refreshToken.deleteMany({ where: { token } });
-      res.clearCookie('refreshToken');
+      res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        path: '/auth',
+      });
     }
     res.sendStatus(200);
   } catch (e) {
     console.log(e);
-    res.status(403).json({ message: 'Invalid refresh token' });
+    res.status(403).json({ errors: ['Invalid token'] });
   }
 };

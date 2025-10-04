@@ -20,6 +20,7 @@ import type {
 } from '@ocs/types';
 import { LoaderCircle } from 'lucide-react';
 import { OCS_API_URL } from '../../helpers/constants.ts';
+import { DEFAULT_SPINNER } from '../../helpers/style-contants.ts';
 
 const createNumberedIcon = (color: NamedColor, number: number) =>
   new L.DivIcon({
@@ -218,7 +219,7 @@ const EventMap = () => {
               >
                 Clear All
               </button>
-              {loading && <LoaderCircle className='animate-spin' />}
+              {loading && <LoaderCircle className={DEFAULT_SPINNER} />}
             </div>
             <p>
               Please note that during development, the first API call may take a

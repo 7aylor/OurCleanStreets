@@ -2,7 +2,14 @@ import { useDispatch } from 'react-redux';
 import { login } from '../../../store/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { OCS_API_URL } from '../../../helpers/constants';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import {
+  DEFAULT_BTN,
+  DEFAULT_BTN_DISABLED,
+  DEFAULT_INPUT,
+  DEFAULT_SPINNER,
+} from '../../../helpers/style-contants';
+import { LoaderCircle } from 'lucide-react';
 
 const Login: React.FC = () => {
   const dispatch = useDispatch();
@@ -10,8 +17,25 @@ const Login: React.FC = () => {
   const emailRef = useRef('');
   const passwordRef = useRef('');
 
-  const onLogin = async () => {
+  const [submitting, setSubmitting] = useState(false);
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const onLogin = async (e: React.FormEvent) => {
+    const form = e.currentTarget as HTMLFormElement;
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    if (!emailRef?.current || !passwordRef?.current) {
+      setErrors(['All fields must not be blank']);
+      return;
+    }
+
+    setSubmitting(true);
     const loginUrl = `${OCS_API_URL}/auth/login`;
+    e.preventDefault();
 
     try {
       let response = await fetch(loginUrl, {
@@ -33,10 +57,16 @@ const Login: React.FC = () => {
         );
         navigate('/user-profile');
       } else {
-        console.error('Login failed:', await response.json());
+        const data = await response.json();
+        if (data.success === false && data.errors?.length > 0) {
+          setErrors(data.errors);
+        }
       }
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      e.preventDefault();
+      console.error(err);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -46,7 +76,7 @@ const Login: React.FC = () => {
 
   return (
     <div className='flex justify-center min-h-screen bg-gray-100'>
-      <div className='bg-white p-8 rounded-2xl shadow-md w-full max-w-sm'>
+      <form className='bg-white p-8 rounded-2xl shadow-md w-full max-w-sm'>
         <h2 className='text-2xl font-semibold text-center mb-6'>Login</h2>
 
         <div className='mb-4'>
@@ -59,9 +89,10 @@ const Login: React.FC = () => {
           <input
             type='email'
             name='email'
-            className='w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500'
+            className={DEFAULT_INPUT}
             placeholder='Enter your email'
             onChange={(e) => (emailRef.current = e.target.value)}
+            required
           />
         </div>
 
@@ -75,18 +106,26 @@ const Login: React.FC = () => {
           <input
             type='password'
             name='password'
-            className='w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500'
+            className={DEFAULT_INPUT}
             placeholder='Enter your password'
             onChange={(e) => (passwordRef.current = e.target.value)}
+            required
           />
         </div>
 
-        <button
-          className='w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-200'
-          onClick={onLogin}
-        >
-          Login
-        </button>
+        <div>
+          <button
+            onClick={onLogin}
+            className={`w-full ${
+              submitting ? DEFAULT_BTN_DISABLED : DEFAULT_BTN
+            }`}
+            type='submit'
+            disabled={submitting}
+          >
+            Login
+          </button>
+          {submitting && <LoaderCircle className={DEFAULT_SPINNER} />}
+        </div>
 
         <div>
           <p>
@@ -99,7 +138,17 @@ const Login: React.FC = () => {
             </a>
           </p>
         </div>
-      </div>
+
+        {errors &&
+          errors.map((err) => (
+            <p
+              key={err}
+              className='text-red-500 text-sm mt-[10px] inline-block'
+            >
+              {err}
+            </p>
+          ))}
+      </form>
     </div>
   );
 };

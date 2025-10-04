@@ -3,6 +3,13 @@ import { OCS_API_URL } from '../../../helpers/constants';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../../store/authSlice';
+import {
+  DEFAULT_BTN,
+  DEFAULT_BTN_DISABLED,
+  DEFAULT_INPUT,
+  DEFAULT_SPINNER,
+} from '../../../helpers/style-contants';
+import { LoaderCircle } from 'lucide-react';
 
 const Signup: React.FC = () => {
   const dispatch = useDispatch();
@@ -11,15 +18,28 @@ const Signup: React.FC = () => {
   const passwordRef = useRef('');
   const confirmPasswordRef = useRef('');
 
+  const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
 
-  const onSignup = async () => {
+  const onSignup = async (e: React.FormEvent) => {
+    if (
+      !emailRef?.current ||
+      !passwordRef?.current ||
+      !confirmPasswordRef?.current
+    ) {
+      setErrors(['All fields must not be blank']);
+      return;
+    }
+
     if (passwordRef.current !== confirmPasswordRef.current) {
+      e.preventDefault();
       setErrors(['Passwords do no match']);
       return;
     } else {
       setErrors([]);
     }
+
+    setSubmitting(true);
 
     const loginUrl = `${OCS_API_URL}/auth/signup`;
 
@@ -51,12 +71,14 @@ const Signup: React.FC = () => {
       }
     } catch (e) {
       console.error(e);
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
     <div className='flex justify-center min-h-screen bg-gray-100'>
-      <div className='bg-white p-8 rounded-2xl shadow-md w-full max-w-sm'>
+      <form className='bg-white p-8 rounded-2xl shadow-md w-full max-w-sm'>
         <h2 className='text-2xl font-semibold text-center mb-6'>Sign Up</h2>
 
         <div className='mb-4'>
@@ -69,9 +91,10 @@ const Signup: React.FC = () => {
           <input
             type='email'
             name='email'
-            className='w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500'
+            className={DEFAULT_INPUT}
             placeholder='Enter your email'
             onChange={(e) => (emailRef.current = e.target.value)}
+            required
           />
         </div>
 
@@ -85,9 +108,10 @@ const Signup: React.FC = () => {
           <input
             type='password'
             name='password'
-            className='w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500'
+            className={DEFAULT_INPUT}
             placeholder='Enter your password'
             onChange={(e) => (passwordRef.current = e.target.value)}
+            required
           />
         </div>
 
@@ -101,18 +125,26 @@ const Signup: React.FC = () => {
           <input
             type='password'
             name='password'
-            className='w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500'
+            className={DEFAULT_INPUT}
             placeholder='Re-Enter your password'
             onChange={(e) => (confirmPasswordRef.current = e.target.value)}
+            required
           />
         </div>
 
-        <button
-          onClick={onSignup}
-          className='w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-200'
-        >
-          Sign Up
-        </button>
+        <div>
+          <button
+            onClick={onSignup}
+            className={`w-full ${
+              submitting ? DEFAULT_BTN_DISABLED : DEFAULT_BTN
+            }`}
+            type='submit'
+            disabled={submitting}
+          >
+            Sign Up
+          </button>
+          {submitting && <LoaderCircle className={DEFAULT_SPINNER} />}
+        </div>
 
         {errors &&
           errors.map((err) => (
@@ -123,7 +155,7 @@ const Signup: React.FC = () => {
               {err}
             </p>
           ))}
-      </div>
+      </form>
     </div>
   );
 };
