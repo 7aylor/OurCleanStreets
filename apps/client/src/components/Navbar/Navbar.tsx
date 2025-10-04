@@ -3,10 +3,12 @@ import './Navbar.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { OCS_API_URL } from '../../helpers/constants';
 import { logout } from '../../store/authSlice';
+import type { AuthRootState } from '../../store/store';
 
 const Navbar = () => {
-  // @ts-ignore
-  const loggedIn = useSelector((state) => !!state.auth.accessToken);
+  const loggedIn = useSelector(
+    (state: AuthRootState) => !!state.auth.accessToken
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -47,6 +49,9 @@ const Navbar = () => {
           <>
             <Link to='/map' className='m-2 hover:text-gray-300'>
               Event Map
+            </Link>
+            <Link to='/user-profile' className='m-2 hover:text-gray-300'>
+              Profile
             </Link>
             <button
               onClick={onLogout}

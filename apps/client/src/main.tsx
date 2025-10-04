@@ -10,21 +10,28 @@ import Signup from './components/Navbar/Signup/Signup.tsx';
 import store from './store/store.ts';
 import Welcome from './components/Welcome.tsx';
 import UserProfile from './components/UserProfile/UserProfile.tsx';
+import { AuthorizedRoute } from './AuthorizedRoute.tsx';
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path='/' element={<Welcome />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/signup' element={<Signup />} />
-            <Route path='/user-profile' element={<UserProfile />} />
-            <Route path='/map' element={<EventMap />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </Provider>
-  </StrictMode>
-);
+const App = () => {
+  return (
+    <StrictMode>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path='/' element={<Welcome />} />
+              <Route path='/login' element={<Login />} />
+              <Route path='/signup' element={<Signup />} />
+              <Route element={<AuthorizedRoute />}>
+                <Route path='/user-profile' element={<UserProfile />} />
+                <Route path='/map' element={<EventMap />} />
+              </Route>
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </Provider>
+    </StrictMode>
+  );
+};
+
+createRoot(document.getElementById('root')!).render(<App />);

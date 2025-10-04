@@ -50,6 +50,7 @@ const EventMap = () => {
   const [location, setLocation] = useState<RouteCoordinate | null>();
   const [, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [componentHasMounted, setComponentHasMounted] = useState(false);
 
   const getLocation = () => {
     if (!navigator?.geolocation) {
@@ -74,6 +75,8 @@ const EventMap = () => {
 
   useEffect(() => {
     getLocation();
+    // necessary to prevent flicker due to map mounting
+    setTimeout(() => setComponentHasMounted(true), 50);
   }, []);
 
   const getCoordinates = async (coords: ICoordinate[]) => {
@@ -156,72 +159,75 @@ const EventMap = () => {
   };
 
   return (
-    <div className='event-map-container'>
-      {location && (
-        <MapContainer
-          // @ts-ignore
-          center={location}
-          zoom={20}
-          style={{ height: '50vh' }}
-        >
-          <TileLayer
+    <>
+      <div className='event-map-container'>
+        {location && (
+          <MapContainer
             // @ts-ignore
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-          />
-          <ClickToAddMarkers onMapClick={handleMapClick} />
-          {markers.map((position, index) => (
-            <Marker
-              key={index}
-              position={position}
-              eventHandlers={{
-                click: () => removeMarker(index),
-              }}
+            center={location}
+            zoom={20}
+            style={{ height: '50vh' }}
+          >
+            <TileLayer
               // @ts-ignore
-              icon={createNumberedIcon(
-                colors[index % colors.length],
-                index + 1
-              )}
-            >
-              <Popup>Marker {index + 1}</Popup>
-            </Marker>
-          ))}
-          <Polyline
-            positions={route}
-            // @ts-ignore
-            weight={8}
-            color='green'
-          />
-        </MapContainer>
-      )}
-
-      <div className='event-panel'>
-        <MarkersTable
-          markers={markers}
-          removeMarker={removeMarker}
-          moveMarker={moveMarker}
-        />
-        <div className='flex items-center gap-1'>
-          <button
-            onClick={onCalculate}
-            className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l'
-          >
-            Calculate Route
-          </button>
-          <button
-            onClick={onClearAllMarkers}
-            className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l'
-          >
-            Clear All
-          </button>
-          {loading && <LoaderCircle className='animate-spin' />}
-        </div>
-        <p>
-          Please note that during development, the first API call may take a
-          while due to dev server limitations.
-        </p>
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+            />
+            <ClickToAddMarkers onMapClick={handleMapClick} />
+            {markers.map((position, index) => (
+              <Marker
+                key={index}
+                position={position}
+                eventHandlers={{
+                  click: () => removeMarker(index),
+                }}
+                // @ts-ignore
+                icon={createNumberedIcon(
+                  colors[index % colors.length],
+                  index + 1
+                )}
+              >
+                <Popup>Marker {index + 1}</Popup>
+              </Marker>
+            ))}
+            <Polyline
+              positions={route}
+              // @ts-ignore
+              weight={8}
+              color='green'
+            />
+          </MapContainer>
+        )}
+        {componentHasMounted && (
+          <div className='event-panel'>
+            <MarkersTable
+              markers={markers}
+              removeMarker={removeMarker}
+              moveMarker={moveMarker}
+            />
+            <div className='flex items-center gap-1'>
+              <button
+                onClick={onCalculate}
+                className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l'
+              >
+                Calculate Route
+              </button>
+              <button
+                onClick={onClearAllMarkers}
+                className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l'
+              >
+                Clear All
+              </button>
+              {loading && <LoaderCircle className='animate-spin' />}
+            </div>
+            <p>
+              Please note that during development, the first API call may take a
+              while due to dev server limitations.
+            </p>
+          </div>
+        )}
       </div>
-    </div>
+    </>
   );
 };
 

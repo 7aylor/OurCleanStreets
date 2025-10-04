@@ -1,13 +1,20 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+
+interface AuthState {
+  accessToken: string | null;
+  email: string | null;
+}
+
+const initialState: AuthState = {
+  accessToken: null,
+  email: null,
+};
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState: {
-    accessToken: null as string | null,
-    email: null as string | null,
-  },
+  initialState,
   reducers: {
-    login: (state, action) => {
+    login: (state, action: PayloadAction<AuthState>) => {
       state.accessToken = action.payload.accessToken;
       state.email = action.payload.email;
     },
