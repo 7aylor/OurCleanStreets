@@ -21,6 +21,7 @@ import type {
 import { LoaderCircle } from 'lucide-react';
 import { OCS_API_URL } from '../../helpers/constants.ts';
 import { DEFAULT_SPINNER } from '../../helpers/style-contants.ts';
+import { useAuthenticatedFetch } from '../../hooks/useAuthenticateFetch.tsx';
 
 const createNumberedIcon = (color: NamedColor, number: number) =>
   new L.DivIcon({
@@ -53,7 +54,9 @@ const EventMap = () => {
   const [loading, setLoading] = useState(false);
   const [componentHasMounted, setComponentHasMounted] = useState(false);
 
-  const getLocation = () => {
+  const authenticatedFetch = useAuthenticatedFetch();
+
+  const getBrowserLocation = () => {
     if (!navigator?.geolocation) {
       setError('Geolocation is not supported by your browser');
       console.log('Geolocation is not supported by your browser');
@@ -75,19 +78,21 @@ const EventMap = () => {
   };
 
   useEffect(() => {
-    getLocation();
+    getBrowserLocation();
     // necessary to prevent flicker due to map mounting
     setTimeout(() => setComponentHasMounted(true), 50);
   }, []);
 
-  const getCoordinates = async (coords: ICoordinate[]) => {
+  const getMapCoordinates = async (coords: ICoordinate[]) => {
     setLoading(true);
     const coordsArr = coords.map((coord: ICoordinate) => [
       coord.lng,
       coord.lat,
     ]);
 
-    let response = await fetch(`${OCS_API_URL}/map/get-route`, {
+    const mapUrl = `${OCS_API_URL}/map/get-route`;
+
+    let response = await authenticatedFetch(mapUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -150,7 +155,7 @@ const EventMap = () => {
 
   const onCalculate = () => {
     if (markers.length > 1) {
-      getCoordinates(markers);
+      getMapCoordinates(markers);
     }
   };
 

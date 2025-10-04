@@ -19,7 +19,7 @@ export const useAuthenticatedFetch = () => {
     };
 
     try {
-      response = await fetch(`${OCS_API_URL}${endpoint}`, {
+      response = await fetch(endpoint, {
         ...options,
         headers,
         credentials: 'include', // send cookies (refresh token)
@@ -42,7 +42,7 @@ export const useAuthenticatedFetch = () => {
             Authorization: `Bearer ${refreshData.accessToken}`,
           };
 
-          response = await fetch(`${OCS_API_URL}${endpoint}`, {
+          response = await fetch(endpoint, {
             ...options,
             headers: retryHeaders,
             credentials: 'include',
