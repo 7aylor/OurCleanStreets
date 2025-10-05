@@ -20,16 +20,17 @@ export async function createRefreshToken(userId: string) {
     const prisma = getPrismaClient();
 
     const dayMs = 1000 * 60 * 60 * 24;
+    const expiresAt = new Date(Date.now() + dayMs * 7);
 
     await prisma.refreshToken.create({
       data: {
         token,
         userId,
-        expiresAt: new Date(Date.now() + dayMs * 7), // 7 days
+        expiresAt,
       },
     });
 
-    return token;
+    return { token, expiresAt };
   } catch (e) {
     console.log(e);
   }

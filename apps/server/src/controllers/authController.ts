@@ -46,11 +46,19 @@ export const login = async (_req: Request<{}, {}, IUser>, res: Response) => {
     const accessToken = createAccessToken(foundUser.id);
     const refreshToken = await createRefreshToken(foundUser.id);
 
+    if (!refreshToken) {
+      return res.status(500).json({
+        success: false,
+        errors: [`Login failed: Please try again.`],
+      });
+    }
+
     // Send refresh token in httpOnly cookie
-    res.cookie('refreshToken', refreshToken, {
+    res.cookie('refreshToken', refreshToken.token, {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',
+      expires: refreshToken.expiresAt,
       path: '/auth',
     });
 
@@ -110,11 +118,19 @@ export const signup = async (_req: Request<{}, {}, IUser>, res: Response) => {
     const accessToken = createAccessToken(newUser.id);
     const refreshToken = await createRefreshToken(newUser.id);
 
+    if (!refreshToken) {
+      return res.status(500).json({
+        success: false,
+        errors: [`Login failed: Please try again.`],
+      });
+    }
+
     // Send refresh token in httpOnly cookie
-    res.cookie('refreshToken', refreshToken, {
+    res.cookie('refreshToken', refreshToken.token, {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',
+      expires: refreshToken.expiresAt,
       path: '/auth',
     });
 
