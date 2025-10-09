@@ -8,23 +8,55 @@ datasource db {
 }
 
 model User {
-  id           String         @id @default(uuid())
-  email        String         @unique
-  passwordHash String
+  id           String         @id @default(uuid()) @db.Uuid
+  email        String         @unique @db.VarChar(255)
+  username     String         @unique @db.VarChar(50)
+  passwordHash String         @db.VarChar(255)
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
+  zipcode      String?        @db.VarChar(10)
   RefreshToken RefreshToken[]
+  activities   Activity[]
 
   @@map("Users")
 }
 
 model RefreshToken {
-  id        String   @id @default(uuid())
-  token     String   @unique
+  id        String   @id @default(uuid()) @db.Uuid
+  token     String   @unique @db.VarChar(1024)
   user      User     @relation(fields: [userId], references: [id])
-  userId    String
+  userId    String   @db.Uuid
   createdAt DateTime @default(now())
   expiresAt DateTime
 
   @@map("RefreshTokens")
+}
+
+model Activity {
+  id             Int      @id @default(autoincrement())
+  userId         String   @db.Uuid
+  activityDate   DateTime
+  duration       Int
+  distance       Float
+  mostCommonItem String?
+  cleanUpRouteId Int      @unique
+
+  user         User         @relation(fields: [userId], references: [id])
+  cleanUpRoute CleanUpRoute @relation(fields: [cleanUpRouteId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map("Activities")
+}
+
+model CleanUpRoute {
+  id           Int      @id @default(autoincrement())
+  creationDate DateTime @default(now())
+  coordinates  Json
+  distance     Float
+
+  activity Activity?
+
+  @@map("CleanUpRoutes")
 }

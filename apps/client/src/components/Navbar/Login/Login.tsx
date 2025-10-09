@@ -120,6 +120,7 @@ const Login: React.FC = () => {
               submitting ? DEFAULT_BTN_DISABLED : DEFAULT_BTN
             }`}
             type='submit'
+            name='login'
             disabled={submitting}
           >
             Login

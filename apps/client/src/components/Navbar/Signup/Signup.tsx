@@ -17,13 +17,17 @@ const Signup: React.FC = () => {
   const emailRef = useRef('');
   const passwordRef = useRef('');
   const confirmPasswordRef = useRef('');
+  const usernameRef = useRef('');
+  const zipcodeRef = useRef('');
 
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
 
   const onSignup = async (e: React.FormEvent) => {
     if (
+      !usernameRef?.current ||
       !emailRef?.current ||
+      !zipcodeRef.current ||
       !passwordRef?.current ||
       !confirmPasswordRef?.current
     ) {
@@ -50,7 +54,9 @@ const Signup: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          username: usernameRef.current,
           email: emailRef.current,
+          zipcode: zipcodeRef.current,
           password: passwordRef.current,
         }),
         credentials: 'include',
@@ -83,6 +89,23 @@ const Signup: React.FC = () => {
 
         <div className='mb-4'>
           <label
+            htmlFor='username'
+            className='block text-gray-700 font-medium mb-2'
+          >
+            Username
+          </label>
+          <input
+            type='text'
+            name='username'
+            className={DEFAULT_INPUT}
+            placeholder='Create a username'
+            onChange={(e) => (usernameRef.current = e.target.value)}
+            required
+          />
+        </div>
+
+        <div className='mb-4'>
+          <label
             htmlFor='email'
             className='block text-gray-700 font-medium mb-2'
           >
@@ -94,6 +117,23 @@ const Signup: React.FC = () => {
             className={DEFAULT_INPUT}
             placeholder='Enter your email'
             onChange={(e) => (emailRef.current = e.target.value)}
+            required
+          />
+        </div>
+
+        <div className='mb-6'>
+          <label
+            htmlFor='zipcode'
+            className='block text-gray-700 font-medium mb-2'
+          >
+            Zipcode
+          </label>
+          <input
+            type='text'
+            name='zipcode'
+            className={DEFAULT_INPUT}
+            placeholder='Zipcode'
+            onChange={(e) => (zipcodeRef.current = e.target.value)}
             required
           />
         </div>

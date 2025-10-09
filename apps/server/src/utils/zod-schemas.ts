@@ -1,7 +1,9 @@
 import z from 'zod';
 
 export const userSchema = z.object({
+  username: z.string().min(3).max(50),
   email: z.email('Invalid email address'),
+  zipcode: z.string().regex(/^\d{5}(-\d{4})?$/),
   password: z
     .string()
     .min(12, { message: 'Password must be at least 12 characters long' })

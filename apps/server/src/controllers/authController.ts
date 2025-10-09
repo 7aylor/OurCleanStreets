@@ -92,10 +92,22 @@ export const signup = async (_req: Request<{}, {}, IUser>, res: Response) => {
       });
     }
 
-    const { email, password } = parseResult.data;
+    const { username, email, zipcode, password } = parseResult.data;
+
+    const foundUsername = await prisma.user.findUnique({
+      where: { username },
+    });
+
+    if (foundUsername) {
+      return res.status(400).json({
+        success: false,
+        message: 'An error has occurred',
+        errors: ['Signup failed, please try again'],
+      });
+    }
 
     const foundUser = await prisma.user.findUnique({
-      where: { email: email },
+      where: { email },
     });
 
     if (foundUser) {
@@ -112,7 +124,13 @@ export const signup = async (_req: Request<{}, {}, IUser>, res: Response) => {
     );
 
     const newUser = await prisma.user.create({
-      data: { email, passwordHash: hash, updatedAt: new Date() },
+      data: {
+        username,
+        email,
+        zipcode,
+        passwordHash: hash,
+        updatedAt: new Date(),
+      },
     });
 
     const accessToken = createAccessToken(newUser.id);
