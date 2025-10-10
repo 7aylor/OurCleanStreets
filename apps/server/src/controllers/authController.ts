@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { getPrismaClient } from '../utils/prisma';
 import { IUser } from '@ocs/types';
-import { userSchema } from '../utils/zod-schemas';
+import { loginSchema, signupSchema } from '../utils/zod-schemas';
 import { createAccessToken, createRefreshToken } from '../utils/auth';
 
 export const login = async (_req: Request<{}, {}, IUser>, res: Response) => {
@@ -10,7 +10,7 @@ export const login = async (_req: Request<{}, {}, IUser>, res: Response) => {
     const prisma = getPrismaClient();
     const user = _req.body;
 
-    const parseResult = userSchema.safeParse(user);
+    const parseResult = loginSchema.safeParse(user);
 
     if (!parseResult.success) {
       return res.status(400).json({
@@ -82,7 +82,7 @@ export const signup = async (_req: Request<{}, {}, IUser>, res: Response) => {
     const prisma = getPrismaClient();
     const user = _req.body;
 
-    const parseResult = userSchema.safeParse(user);
+    const parseResult = signupSchema.safeParse(user);
 
     if (!parseResult.success) {
       return res.status(400).json({
