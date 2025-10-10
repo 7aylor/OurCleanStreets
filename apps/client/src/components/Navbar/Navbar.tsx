@@ -47,8 +47,8 @@ const Navbar = () => {
         )}
         {loggedIn && (
           <>
-            <Link to='/map' className='m-2 hover:text-gray-300'>
-              Event Map
+            <Link to='/log-activity' className='m-2 hover:text-gray-300'>
+              Log Activity
             </Link>
             <Link to='/user-profile' className='m-2 hover:text-gray-300'>
               Profile

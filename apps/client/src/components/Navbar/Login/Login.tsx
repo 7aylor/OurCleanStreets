@@ -7,6 +7,7 @@ import {
   DEFAULT_BTN,
   DEFAULT_BTN_DISABLED,
   DEFAULT_INPUT,
+  DEFAULT_INPUT_LABEL,
   DEFAULT_SPINNER,
 } from '../../../helpers/style-contants';
 import { LoaderCircle } from 'lucide-react';
@@ -80,10 +81,7 @@ const Login: React.FC = () => {
         <h2 className='text-2xl font-semibold text-center mb-6'>Login</h2>
 
         <div className='mb-4'>
-          <label
-            htmlFor='email'
-            className='block text-gray-700 font-medium mb-2'
-          >
+          <label htmlFor='email' className={DEFAULT_INPUT_LABEL}>
             Email
           </label>
           <input
@@ -97,10 +95,7 @@ const Login: React.FC = () => {
         </div>
 
         <div className='mb-6'>
-          <label
-            htmlFor='password'
-            className='block text-gray-700 font-medium mb-2'
-          >
+          <label htmlFor='password' className={DEFAULT_INPUT_LABEL}>
             Password
           </label>
           <input

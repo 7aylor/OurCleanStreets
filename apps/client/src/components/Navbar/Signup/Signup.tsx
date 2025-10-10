@@ -7,6 +7,7 @@ import {
   DEFAULT_BTN,
   DEFAULT_BTN_DISABLED,
   DEFAULT_INPUT,
+  DEFAULT_INPUT_LABEL,
   DEFAULT_SPINNER,
 } from '../../../helpers/style-contants';
 import { LoaderCircle } from 'lucide-react';
@@ -88,10 +89,7 @@ const Signup: React.FC = () => {
         <h2 className='text-2xl font-semibold text-center mb-6'>Sign Up</h2>
 
         <div className='mb-4'>
-          <label
-            htmlFor='username'
-            className='block text-gray-700 font-medium mb-2'
-          >
+          <label htmlFor='username' className={DEFAULT_INPUT_LABEL}>
             Username
           </label>
           <input
@@ -105,10 +103,7 @@ const Signup: React.FC = () => {
         </div>
 
         <div className='mb-4'>
-          <label
-            htmlFor='email'
-            className='block text-gray-700 font-medium mb-2'
-          >
+          <label htmlFor='email' className={DEFAULT_INPUT_LABEL}>
             Email
           </label>
           <input
@@ -122,10 +117,7 @@ const Signup: React.FC = () => {
         </div>
 
         <div className='mb-6'>
-          <label
-            htmlFor='zipcode'
-            className='block text-gray-700 font-medium mb-2'
-          >
+          <label htmlFor='zipcode' className={DEFAULT_INPUT_LABEL}>
             Zipcode
           </label>
           <input
@@ -139,10 +131,7 @@ const Signup: React.FC = () => {
         </div>
 
         <div className='mb-6'>
-          <label
-            htmlFor='password'
-            className='block text-gray-700 font-medium mb-2'
-          >
+          <label htmlFor='password' className={DEFAULT_INPUT_LABEL}>
             Password
           </label>
           <input
@@ -156,10 +145,7 @@ const Signup: React.FC = () => {
         </div>
 
         <div className='mb-6'>
-          <label
-            htmlFor='password'
-            className='block text-gray-700 font-medium mb-2'
-          >
+          <label htmlFor='password' className={DEFAULT_INPUT_LABEL}>
             Re-Enter Password
           </label>
           <input

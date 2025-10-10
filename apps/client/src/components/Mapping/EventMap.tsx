@@ -20,7 +20,12 @@ import type {
 } from '@ocs/types';
 import { LoaderCircle } from 'lucide-react';
 import { OCS_API_URL } from '../../helpers/constants.ts';
-import { DEFAULT_SPINNER } from '../../helpers/style-contants.ts';
+import {
+  DEFAULT_BTN,
+  DEFAULT_BTN_DISABLED,
+  DEFAULT_INPUT,
+  DEFAULT_SPINNER,
+} from '../../helpers/style-contants.ts';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticateFetch.tsx';
 
 const createNumberedIcon = (color: NamedColor, number: number) =>
@@ -48,6 +53,8 @@ const createNumberedIcon = (color: NamedColor, number: number) =>
 const EventMap = () => {
   const [markers, setMarkers] = useState<ICoordinate[]>([]);
   const [route, setRoute] = useState<RouteCoordinates>([]);
+  const [distance, setDistance] = useState(0);
+  const [duration, setDuration] = useState(0);
 
   const [location, setLocation] = useState<RouteCoordinate | null>();
   const [, setError] = useState<string | null>(null);
@@ -80,7 +87,7 @@ const EventMap = () => {
   useEffect(() => {
     getBrowserLocation();
     // necessary to prevent flicker due to map mounting
-    setTimeout(() => setComponentHasMounted(true), 50);
+    setTimeout(() => setComponentHasMounted(true), 100);
   }, []);
 
   const getMapCoordinates = async (coords: ICoordinate[]) => {
@@ -101,8 +108,10 @@ const EventMap = () => {
     });
 
     if (response.ok) {
-      const routeCoords: RouteCoordinates = await response.json();
-      setRoute(routeCoords);
+      const json = await response.json();
+      setRoute(json.coordinates);
+      setDistance(json.distance);
+      setDuration(json.duration);
     }
     setLoading(false);
   };
@@ -153,20 +162,28 @@ const EventMap = () => {
     });
   };
 
-  const onCalculate = () => {
+  const onCalculate = (e: React.FormEvent) => {
+    e.preventDefault();
     if (markers.length > 1) {
       getMapCoordinates(markers);
     }
   };
 
-  const onClearAllMarkers = () => {
-    setMarkers(() => []);
-    setRoute(() => []);
+  const onClearAllMarkers = (e: React.FormEvent) => {
+    e.preventDefault();
+    setMarkers([]);
+    setRoute([]);
+    setDistance(0);
+    setDuration(0);
   };
 
   return (
     <>
-      <div className='event-map-container'>
+      <div className='flex gap-1'>
+        <input placeholder='Search for Address' className={DEFAULT_INPUT} />
+        <button className={DEFAULT_BTN}>Search</button>
+      </div>
+      <div className='event-map-container p-2 border-1 border-e-indigo-900 rounded-1xl'>
         {location && (
           <MapContainer
             // @ts-ignore
@@ -205,31 +222,45 @@ const EventMap = () => {
           </MapContainer>
         )}
         {componentHasMounted && (
-          <div className='event-panel'>
-            <MarkersTable
-              markers={markers}
-              removeMarker={removeMarker}
-              moveMarker={moveMarker}
-            />
-            <div className='flex items-center gap-1'>
+          <div className='event-panel w-115'>
+            <div className='flex items-center gap-1 mt-2'>
               <button
                 onClick={onCalculate}
-                className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l'
+                className={
+                  markers.length > 1 ? DEFAULT_BTN : DEFAULT_BTN_DISABLED
+                }
+                disabled={markers.length < 1}
+                type='button'
               >
                 Calculate Route
               </button>
               <button
                 onClick={onClearAllMarkers}
-                className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l'
+                className={
+                  markers.length === 0 ? DEFAULT_BTN_DISABLED : DEFAULT_BTN
+                }
+                type='button'
               >
                 Clear All
               </button>
               {loading && <LoaderCircle className={DEFAULT_SPINNER} />}
             </div>
-            <p>
+            <p className='text-xs'>
               Please note that during development, the first API call may take a
               while due to dev server limitations.
             </p>
+            {!!duration && !!distance && (
+              <p>
+                duration: {duration}s, distance: {distance}m
+              </p>
+            )}
+            {markers.length > 0 && (
+              <MarkersTable
+                markers={markers}
+                removeMarker={removeMarker}
+                moveMarker={moveMarker}
+              />
+            )}
           </div>
         )}
       </div>
