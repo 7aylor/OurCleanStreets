@@ -45,8 +45,8 @@ const Navbar = () => {
         )}
         {loggedIn && (
           <>
-            <Link to='/log-activity' className='m-2 hover:text-gray-300'>
-              Log Activity
+            <Link to='/activities' className='m-2 hover:text-gray-300'>
+              Activities
             </Link>
             <Link to='/user-profile' className='m-2 hover:text-gray-300'>
               Profile

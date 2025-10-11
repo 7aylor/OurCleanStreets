@@ -4,6 +4,7 @@ import { getPrismaClient } from '../utils/prisma';
 import { IUser } from '@ocs/types';
 import { loginSchema, signupSchema } from '../utils/zod-schemas';
 import { createAccessToken, createRefreshToken } from '../utils/auth';
+import { email } from 'zod';
 
 export const login = async (_req: Request<{}, {}, IUser>, res: Response) => {
   try {
@@ -193,7 +194,12 @@ export const refresh = async (_req: Request<{}, {}, IUser>, res: Response) => {
     }
 
     const accessToken = createAccessToken(dbRefreshToken.userId);
-    res.json({ accessToken });
+    res.json({
+      accessToken,
+      userId: dbRefreshToken.userId,
+      username: dbRefreshToken.user.username,
+      email: dbRefreshToken.user.email,
+    });
   } catch (e) {
     console.log(e);
     res.status(403).json({ errors: ['Invalid token'] });

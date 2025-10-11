@@ -4,6 +4,9 @@ export const DEFAULT_BTN =
 export const DEFAULT_BTN_DISABLED =
   'bg-indigo-300 text-white py-2 px-4 rounded-lg ';
 
+export const DEFAULT_H1 =
+  'text-2xl font-bold text-gray-900 tracking-tight text-center';
+
 export const DEFAULT_INPUT =
   'w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500';
 

@@ -101,10 +101,6 @@ const EventMap = () => {
     const mapUrl = `${OCS_API_URL}/map/get-route`;
 
     let response = await authenticatedFetch(mapUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       body: JSON.stringify({ coordinates: coordsArr }),
     });
 

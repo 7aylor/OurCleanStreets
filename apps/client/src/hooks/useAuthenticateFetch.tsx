@@ -13,31 +13,34 @@ export const useAuthenticatedFetch = () => {
 
     // Attach access token to headers
     const headers = {
-      ...options.headers,
+      ...(options.headers || {}),
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     };
 
-    let userInjectedBody = options.body;
-    if (options.body && typeof options.body === 'string') {
-      try {
-        const parsedBody = JSON.parse(options.body);
-        userInjectedBody = JSON.stringify({
-          ...parsedBody,
-          userId,
-          username,
-        });
-      } catch {
-        console.warn('Request body not valid JSON — skipping user injection.');
-      }
+    // inject user info into body if JSON
+    let userInjectedBody;
+    try {
+      const parsedBody =
+        options?.body && typeof options.body === 'string'
+          ? JSON.parse(options.body)
+          : '';
+      userInjectedBody = JSON.stringify({
+        ...parsedBody,
+        userId,
+        username,
+      });
+    } catch {
+      console.warn('Request body not valid JSON — skipping user injection.');
     }
 
     try {
       response = await fetch(endpoint, {
         ...options,
+        method: options.method || 'POST',
+        credentials: 'include',
         headers,
         body: userInjectedBody,
-        credentials: 'include', // send cookies (refresh token)
       });
 
       // If unauthorized, try to refresh the token
@@ -66,9 +69,10 @@ export const useAuthenticatedFetch = () => {
 
           response = await fetch(endpoint, {
             ...options,
+            method: options.method || 'POST',
+            credentials: 'include',
             headers: retryHeaders,
             body: userInjectedBody,
-            credentials: 'include',
           });
         } else {
           dispatch(logout());

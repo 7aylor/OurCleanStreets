@@ -1,12 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
   DEFAULT_BTN,
+  DEFAULT_H1,
   DEFAULT_INPUT,
   DEFAULT_INPUT_LABEL,
 } from '../../helpers/style-contants';
 import EventMap from '../Mapping/EventMap';
 import type { RootState } from '../../store/store';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { getDurationParts, OCS_API_URL } from '../../helpers/constants';
 import { currentRoute } from '../../store/routeSlice';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticateFetch.tsx';
@@ -16,6 +17,8 @@ const Activity = () => {
     (state: RootState) => state.route
   );
 
+  const [saveResult, setSaveResult] = useState('');
+
   const activityDateRef = useRef('');
   const mostCommonItemRef = useRef('');
   const authenticatedFetch = useAuthenticatedFetch();
@@ -23,6 +26,7 @@ const Activity = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // reset current Route since this is a new activity
     dispatch(currentRoute({ coordinates: [], duration: 0, distance: 0 }));
   }, []);
 
@@ -55,14 +59,15 @@ const Activity = () => {
       body: JSON.stringify(payload),
     });
 
-    console.log(response);
+    if (response.ok) {
+      const json = await response.json();
+      setSaveResult(json.message);
+    }
   };
 
   return (
     <div>
-      <h1 className='text-2xl font-bold text-gray-900 tracking-tight text-center'>
-        Log Cleanup Activity
-      </h1>
+      <h1 className={DEFAULT_H1}>Log Cleanup Activity</h1>
       <form>
         <div>
           <EventMap />
@@ -114,6 +119,11 @@ const Activity = () => {
           </button>
         </div>
       </form>
+      {saveResult && (
+        <div className='text-red-700 text-center mt-2'>
+          <p>{saveResult}</p>
+        </div>
+      )}
     </div>
   );
 };
