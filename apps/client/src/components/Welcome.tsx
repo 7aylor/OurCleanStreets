@@ -1,13 +1,11 @@
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import type { AuthRootState } from '../store/store';
+import type { RootState } from '../store/store';
 
 function Welcome() {
   const navigate = useNavigate();
 
-  const loggedIn = useSelector(
-    (state: AuthRootState) => state.auth.accessToken
-  );
+  const loggedIn = useSelector((state: RootState) => state.auth.accessToken);
 
   const onGetStarted = () => {
     navigate('/signup');

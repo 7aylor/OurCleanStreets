@@ -27,6 +27,8 @@ import {
   DEFAULT_SPINNER,
 } from '../../helpers/style-contants.ts';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticateFetch.tsx';
+import { currentRoute } from '../../store/routeSlice.ts';
+import { useDispatch } from 'react-redux';
 
 const createNumberedIcon = (color: NamedColor, number: number) =>
   new L.DivIcon({
@@ -53,8 +55,6 @@ const createNumberedIcon = (color: NamedColor, number: number) =>
 const EventMap = () => {
   const [markers, setMarkers] = useState<ICoordinate[]>([]);
   const [route, setRoute] = useState<RouteCoordinates>([]);
-  const [distance, setDistance] = useState(0);
-  const [duration, setDuration] = useState(0);
 
   const [location, setLocation] = useState<RouteCoordinate | null>();
   const [, setError] = useState<string | null>(null);
@@ -62,6 +62,7 @@ const EventMap = () => {
   const [componentHasMounted, setComponentHasMounted] = useState(false);
 
   const authenticatedFetch = useAuthenticatedFetch();
+  const dispatch = useDispatch();
 
   const getBrowserLocation = () => {
     if (!navigator?.geolocation) {
@@ -110,8 +111,14 @@ const EventMap = () => {
     if (response.ok) {
       const json = await response.json();
       setRoute(json.coordinates);
-      setDistance(json.distance);
-      setDuration(json.duration);
+
+      dispatch(
+        currentRoute({
+          coordinates: json.coordinates,
+          distance: json.distance,
+          duration: json.duration,
+        })
+      );
     }
     setLoading(false);
   };
@@ -173,8 +180,6 @@ const EventMap = () => {
     e.preventDefault();
     setMarkers([]);
     setRoute([]);
-    setDistance(0);
-    setDuration(0);
   };
 
   return (
@@ -249,11 +254,6 @@ const EventMap = () => {
               Please note that during development, the first API call may take a
               while due to dev server limitations.
             </p>
-            {!!duration && !!distance && (
-              <p>
-                duration: {duration}s, distance: {distance}m
-              </p>
-            )}
             {markers.length > 0 && (
               <MarkersTable
                 markers={markers}

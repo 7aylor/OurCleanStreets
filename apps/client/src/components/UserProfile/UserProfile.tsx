@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import type { AuthRootState } from '../../store/store';
+import type { RootState } from '../../store/store';
 import { useRef, useState } from 'react';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticateFetch';
 import {
@@ -10,7 +10,7 @@ import {
 import { OCS_API_URL } from '../../helpers/constants';
 
 const UserProfile = () => {
-  const email = useSelector((state: AuthRootState) => state.auth.email);
+  const { username } = useSelector((state: RootState) => state.auth);
   const [resetPassword, setResetPassword] = useState(false);
   const [resetPasswordStatus, setResetPasswordStatus] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -82,7 +82,7 @@ const UserProfile = () => {
 
   return (
     <div>
-      <h2>Hello, {email}</h2>
+      <h2>Hello, {username}</h2>
       {!resetPassword && (
         <button
           onClick={() => setResetPassword(true)}

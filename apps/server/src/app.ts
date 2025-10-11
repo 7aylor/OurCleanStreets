@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoutes';
 // @ts-ignore
 import cookieParser from 'cookie-parser';
 import userRoutes from './routes/userRoutes';
+import activityRoutes from './routes/activityRoutes';
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use(
 app.use('/auth', authRoutes);
 app.use('/map', mapRoutes);
 app.use('/user', userRoutes);
+app.use('/activity', activityRoutes);
 
 app.get('/', (_req, res) => {
   res.send('Hello World!');

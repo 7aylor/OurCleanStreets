@@ -3,12 +3,10 @@ import './Navbar.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { OCS_API_URL } from '../../helpers/constants';
 import { logout } from '../../store/authSlice';
-import type { AuthRootState } from '../../store/store';
+import type { RootState } from '../../store/store';
 
 const Navbar = () => {
-  const loggedIn = useSelector(
-    (state: AuthRootState) => !!state.auth.accessToken
-  );
+  const loggedIn = useSelector((state: RootState) => !!state.auth.accessToken);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

@@ -1,11 +1,11 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { login, logout } from '../store/authSlice';
 import { OCS_API_URL } from '../helpers/constants';
-import type { AuthRootState } from '../store/store';
+import type { RootState } from '../store/store';
 
 export const useAuthenticatedFetch = () => {
-  const auth = useSelector((state: AuthRootState) => state.auth);
-  const { accessToken, email } = auth;
+  const auth = useSelector((state: RootState) => state.auth);
+  const { accessToken, email, userId, username } = auth;
   const dispatch = useDispatch();
 
   const fetchWithAuth = async (endpoint: string, options: RequestInit = {}) => {
@@ -18,10 +18,25 @@ export const useAuthenticatedFetch = () => {
       'Content-Type': 'application/json',
     };
 
+    let userInjectedBody = options.body;
+    if (options.body && typeof options.body === 'string') {
+      try {
+        const parsedBody = JSON.parse(options.body);
+        userInjectedBody = JSON.stringify({
+          ...parsedBody,
+          userId,
+          username,
+        });
+      } catch {
+        console.warn('Request body not valid JSON — skipping user injection.');
+      }
+    }
+
     try {
       response = await fetch(endpoint, {
         ...options,
         headers,
+        body: userInjectedBody,
         credentials: 'include', // send cookies (refresh token)
       });
 
@@ -34,7 +49,14 @@ export const useAuthenticatedFetch = () => {
 
         if (refreshResponse.ok) {
           const refreshData = await refreshResponse.json();
-          dispatch(login({ accessToken: refreshData.accessToken, email }));
+          dispatch(
+            login({
+              accessToken: refreshData.accessToken,
+              email,
+              userId,
+              username,
+            })
+          );
 
           // Retry the original request with the new token
           const retryHeaders = {
@@ -45,6 +67,7 @@ export const useAuthenticatedFetch = () => {
           response = await fetch(endpoint, {
             ...options,
             headers: retryHeaders,
+            body: userInjectedBody,
             credentials: 'include',
           });
         } else {

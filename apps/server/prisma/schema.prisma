@@ -36,8 +36,6 @@ model Activity {
   id             Int      @id @default(autoincrement())
   userId         String   @db.Uuid
   activityDate   DateTime
-  duration       Int
-  distance       Float
   mostCommonItem String?
   cleanUpRouteId Int      @unique
 
@@ -51,10 +49,11 @@ model Activity {
 }
 
 model CleanUpRoute {
-  id           Int      @id @default(autoincrement())
-  creationDate DateTime @default(now())
-  coordinates  Json
-  distance     Float
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  coordinates Json
+  distance    Float
+  duration    Float
 
   activity Activity?
 

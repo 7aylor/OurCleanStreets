@@ -22,7 +22,7 @@ export const login = async (_req: Request<{}, {}, IUser>, res: Response) => {
     const { email, password } = parseResult.data;
 
     const foundUser = await prisma.user.findUnique({
-      where: { email: email },
+      where: { email },
     });
 
     const LOGIN_ERROR = 'Login Failed. Invalid credentials or user not found';
@@ -65,7 +65,11 @@ export const login = async (_req: Request<{}, {}, IUser>, res: Response) => {
     return res.status(200).json({
       success: true,
       message: 'Login successful',
-      user: { email: user.email },
+      user: {
+        email: foundUser.email,
+        username: foundUser.username,
+        userId: foundUser.id,
+      },
       accessToken,
     });
   } catch (error) {
@@ -155,7 +159,11 @@ export const signup = async (_req: Request<{}, {}, IUser>, res: Response) => {
     return res.status(201).json({
       success: true,
       message: 'Signup successful',
-      user: { email: newUser.email },
+      user: {
+        email: newUser.email,
+        username: newUser.username,
+        userId: newUser.id,
+      },
       accessToken,
     });
   } catch (error) {
@@ -185,7 +193,7 @@ export const refresh = async (_req: Request<{}, {}, IUser>, res: Response) => {
     }
 
     const accessToken = createAccessToken(dbRefreshToken.userId);
-    res.json({ accessToken, email: dbRefreshToken.user.email });
+    res.json({ accessToken });
   } catch (e) {
     console.log(e);
     res.status(403).json({ errors: ['Invalid token'] });

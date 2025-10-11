@@ -66,7 +66,12 @@ const Signup: React.FC = () => {
       if (response.ok) {
         const data = await response.json();
         dispatch(
-          login({ accessToken: data.accessToken, email: data.user.email })
+          login({
+            accessToken: data.accessToken,
+            email: data.user.email,
+            userId: data.user.userId,
+            username: data.user.username,
+          })
         );
         navigate('/user-profile');
       } else {

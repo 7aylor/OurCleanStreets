@@ -22,8 +22,15 @@ export const useAuthenticateOnLoad = () => {
 
         if (res.ok) {
           const data = await res.json();
-          dispatch(login({ accessToken: data.accessToken, email: data.email }));
-          navigate('/user-profile');
+          dispatch(
+            login({
+              accessToken: data.accessToken,
+              email: data.email,
+              userId: data.userId,
+              username: data.username,
+            })
+          );
+          navigate(localStorage.getItem('lastRoute') ?? '/user-profile');
         } else {
           dispatch(logout());
         }
