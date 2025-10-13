@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './authSlice';
 import routeReducer from './routeSlice';
+import activitiesReducer from './activitiesSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     route: routeReducer,
+    activities: activitiesReducer,
   },
 });
 

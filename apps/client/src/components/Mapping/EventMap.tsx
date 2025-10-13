@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   MapContainer,
   TileLayer,
@@ -6,7 +6,6 @@ import {
   Popup,
   Polyline,
 } from 'react-leaflet';
-import './EventMap.css';
 import ClickToAddMarkers from './ClickToAddMarkers.tsx';
 // @ts-ignore
 import L from 'leaflet';
@@ -29,6 +28,8 @@ import {
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticateFetch.tsx';
 import { currentRoute } from '../../store/routeSlice.ts';
 import { useDispatch } from 'react-redux';
+import { getRouteColorByDate } from '../../helpers/utils.ts';
+import FitMapToRoute from './FitMapToRoute.tsx';
 
 const createNumberedIcon = (color: NamedColor, number: number) =>
   new L.DivIcon({
@@ -52,7 +53,15 @@ const createNumberedIcon = (color: NamedColor, number: number) =>
     iconAnchor: [15, 15], // bottom-center
   });
 
-const EventMap = () => {
+const EventMap = ({
+  editable = true,
+  existingRoute = [],
+  existingDate,
+}: {
+  editable?: boolean;
+  existingRoute?: RouteCoordinates;
+  existingDate?: Date | undefined;
+}) => {
   const [markers, setMarkers] = useState<ICoordinate[]>([]);
   const [route, setRoute] = useState<RouteCoordinates>([]);
 
@@ -86,10 +95,26 @@ const EventMap = () => {
   };
 
   useEffect(() => {
+    // if (editable) {
     getBrowserLocation();
     // necessary to prevent flicker due to map mounting
     setTimeout(() => setComponentHasMounted(true), 100);
+    // }
   }, []);
+
+  useEffect(() => {
+    if (existingRoute && existingRoute.length > 0) {
+      setRoute(existingRoute);
+    }
+  }, [existingRoute]);
+
+  const routeColor = useMemo(() => {
+    if (existingDate) {
+      return getRouteColorByDate(existingDate);
+    } else {
+      return 'blue';
+    }
+  }, [existingDate]);
 
   const getMapCoordinates = async (coords: ICoordinate[]) => {
     setLoading(true);
@@ -180,16 +205,22 @@ const EventMap = () => {
 
   return (
     <>
-      <div className='flex gap-1'>
-        <input placeholder='Search for Address' className={DEFAULT_INPUT} />
-        <button className={DEFAULT_BTN}>Search</button>
-      </div>
-      <div className='event-map-container p-2 border-1 border-e-indigo-900 rounded-1xl'>
+      {editable && (
+        <div className='flex gap-1'>
+          <input placeholder='Search for Address' className={DEFAULT_INPUT} />
+          <button className={DEFAULT_BTN}>Search</button>
+        </div>
+      )}
+      <div
+        className={`p-2 border-1 border-e-indigo-900 rounded-1xl mt-3 ${
+          editable ? 'grid grid-cols-[2fr_1fr] gap-2' : ''
+        }`}
+      >
         {location && (
           <MapContainer
             // @ts-ignore
-            center={location}
-            zoom={20}
+            center={editable ? location : route[0]}
+            zoom={editable ? 20 : 13}
             style={{ height: '50vh' }}
           >
             <TileLayer
@@ -197,33 +228,35 @@ const EventMap = () => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
             />
-            <ClickToAddMarkers onMapClick={handleMapClick} />
-            {markers.map((position, index) => (
-              <Marker
-                key={index}
-                position={position}
-                eventHandlers={{
-                  click: () => removeMarker(index),
-                }}
-                // @ts-ignore
-                icon={createNumberedIcon(
-                  colors[index % colors.length],
-                  index + 1
-                )}
-              >
-                <Popup>Marker {index + 1}</Popup>
-              </Marker>
-            ))}
+            {editable && <ClickToAddMarkers onMapClick={handleMapClick} />}
+            {editable &&
+              markers.map((position, index) => (
+                <Marker
+                  key={index}
+                  position={position}
+                  eventHandlers={{
+                    click: () => removeMarker(index),
+                  }}
+                  // @ts-ignore
+                  icon={createNumberedIcon(
+                    colors[index % colors.length],
+                    index + 1
+                  )}
+                >
+                  <Popup>Marker {index + 1}</Popup>
+                </Marker>
+              ))}
             <Polyline
               positions={route}
               // @ts-ignore
-              weight={8}
-              color='green'
+              weight={5}
+              color={routeColor}
             />
+            {existingRoute && <FitMapToRoute route={existingRoute} />}
           </MapContainer>
         )}
-        {componentHasMounted && (
-          <div className='event-panel w-115'>
+        {componentHasMounted && editable && (
+          <div className='w-115 p-2 bg-gray-100'>
             <div className='flex items-center gap-1 mt-2'>
               <button
                 onClick={onCalculate}

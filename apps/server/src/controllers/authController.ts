@@ -4,7 +4,6 @@ import { getPrismaClient } from '../utils/prisma';
 import { IUser } from '@ocs/types';
 import { loginSchema, signupSchema } from '../utils/zod-schemas';
 import { createAccessToken, createRefreshToken } from '../utils/auth';
-import { email } from 'zod';
 
 export const login = async (_req: Request<{}, {}, IUser>, res: Response) => {
   try {

@@ -1,4 +1,4 @@
-import type { RouteCoordinate } from './MapTypes';
+import type { RouteCoordinates } from './MapTypes';
 
 export interface IActivityResponse {
   activities: IActivity[];
@@ -8,7 +8,7 @@ export interface IActivity {
   id: number;
   userId: string;
   activityDate: string;
-  mostCommonItem: string | null;
+  mostCommonItem: string | undefined;
   cleanUpRouteId: number;
   createdAt: string;
   updatedAt: string;
@@ -18,7 +18,7 @@ export interface IActivity {
 export interface ICleanUpRoute {
   id: number;
   createdAt: string;
-  coordinates: RouteCoordinate[] | null;
+  coordinates: RouteCoordinates | undefined;
   distance: number;
   duration: number;
 }

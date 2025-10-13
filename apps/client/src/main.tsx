@@ -10,9 +10,10 @@ import store from './store/store.ts';
 import Welcome from './components/Welcome.tsx';
 import UserProfile from './components/UserProfile/UserProfile.tsx';
 import { AuthorizedRoute } from './AuthorizedRoute.tsx';
-import Activity from './components/Activities/Activity.tsx';
+import LogActivity from './components/Activities/LogActivity.tsx';
 import Activities from './components/Activities/Activities.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import ActivityDetails from './components/Activities/ActivityDetails.tsx';
 
 const queryClient = new QueryClient();
 
@@ -29,7 +30,11 @@ const App = () => {
                 <Route path='/signup' element={<Signup />} />
                 <Route element={<AuthorizedRoute />}>
                   <Route path='/user-profile' element={<UserProfile />} />
-                  <Route path='/log-activity' element={<Activity />} />
+                  <Route path='/log-activity' element={<LogActivity />} />
+                  <Route
+                    path='/activity-details/:id'
+                    element={<ActivityDetails />}
+                  />
                   <Route path='/activities' element={<Activities />} />
                 </Route>
               </Route>
