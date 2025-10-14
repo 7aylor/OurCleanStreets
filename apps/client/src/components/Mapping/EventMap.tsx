@@ -222,6 +222,14 @@ const EventMap = ({
             center={editable ? location : route[0]}
             zoom={editable ? 20 : 13}
             style={{ height: '50vh' }}
+            scrollWheelZoom={editable}
+            dragging={editable}
+            doubleClickZoom={editable}
+            zoomControl={editable}
+            attributionControl={editable}
+            keyboard={editable}
+            touchZoom={editable}
+            boxZoom={editable}
           >
             <TileLayer
               // @ts-ignore

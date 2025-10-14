@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../store/store';
 import type { IActivity } from '@ocs/types';
+import ActivityFields from './ActivityFields';
 
 const ActivityDetails = () => {
   const { id } = useParams();
@@ -34,6 +35,10 @@ const ActivityDetails = () => {
         editable={false}
         existingRoute={selectedActivity?.cleanUpRoute.coordinates}
         existingDate={date}
+      />
+      <ActivityFields
+        {...selectedActivity}
+        {...selectedActivity?.cleanUpRoute}
       />
     </div>
   );

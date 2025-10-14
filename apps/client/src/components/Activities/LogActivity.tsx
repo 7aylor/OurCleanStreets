@@ -67,18 +67,19 @@ const LogActivity = () => {
         <div>
           <EventMap />
         </div>
-        <div className='grid grid-cols-4 gap-3 mt-3'>
-          <ActivityFields
-            activityDate={activityDate}
-            mostCommonItem={mostCommonItem}
-            distance={distance}
-            duration={duration}
-            events={{
-              activityDateChange: onActivityDateChange,
-              mostCommonItemChange: onMostCommonItemChange,
-            }}
-          />
-        </div>
+
+        <ActivityFields
+          activityDate={activityDate}
+          mostCommonItem={mostCommonItem}
+          distance={distance}
+          duration={duration}
+          events={{
+            activityDateChange: onActivityDateChange,
+            mostCommonItemChange: onMostCommonItemChange,
+          }}
+          readonly={false}
+        />
+
         <div className='flex justify-center'>
           <button
             className={`${DEFAULT_BTN} mt-4 w-155 self-center`}
