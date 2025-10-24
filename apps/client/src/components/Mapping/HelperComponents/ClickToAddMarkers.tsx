@@ -6,7 +6,6 @@ function ClickToAddMarkers({
 }: {
   onMapClick: (latlng: ICoordinate) => void;
 }) {
-  // This component now only listens for clicks and calls the passed callback
   useMapEvents({
     click(e: any) {
       onMapClick(e.latlng);

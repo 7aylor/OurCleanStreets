@@ -6,7 +6,7 @@ import {
   Popup,
   Polyline,
 } from 'react-leaflet';
-import ClickToAddMarkers from './ClickToAddMarkers.tsx';
+import ClickToAddMarkers from './HelperComponents/ClickToAddMarkers.tsx';
 // @ts-ignore
 import L from 'leaflet';
 import { primaryColors as colors, type NamedColor } from '../../types/types.ts';
@@ -22,7 +22,6 @@ import { OCS_API_URL } from '../../helpers/constants.ts';
 import {
   DEFAULT_BTN,
   DEFAULT_BTN_DISABLED,
-  DEFAULT_INPUT,
   DEFAULT_SPINNER,
 } from '../../helpers/style-contants.ts';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticateFetch.tsx';
@@ -30,6 +29,8 @@ import { currentRoute } from '../../store/routeSlice.ts';
 import { useDispatch } from 'react-redux';
 import { getRouteColorByDate } from '../../helpers/utils.ts';
 import FitMapToRoute from './FitMapToRoute.tsx';
+import { Search } from './Search.tsx';
+import { RecenterMap } from './HelperComponents/RecenterMap.tsx';
 
 const createNumberedIcon = (color: NamedColor, number: number) =>
   new L.DivIcon({
@@ -76,7 +77,6 @@ const EventMap = ({
   const getBrowserLocation = () => {
     if (!navigator?.geolocation) {
       setError('Geolocation is not supported by your browser');
-      console.log('Geolocation is not supported by your browser');
       setLocation([33.424564, -111.928001]); // Default to ASU lat/lng
       return;
     }
@@ -88,7 +88,6 @@ const EventMap = ({
       },
       (err) => {
         setError(err.message);
-        console.log(err.message);
         setLocation([33.424564, -111.928001]);
       }
     );
@@ -203,14 +202,13 @@ const EventMap = ({
     setRoute([]);
   };
 
+  const updateLocation = (coords: RouteCoordinate) => {
+    setLocation(coords);
+  };
+
   return (
     <>
-      {editable && (
-        <div className='flex gap-1'>
-          <input placeholder='Search for Address' className={DEFAULT_INPUT} />
-          <button className={DEFAULT_BTN}>Search</button>
-        </div>
-      )}
+      {editable && <Search updateLocation={updateLocation} />}
       <div
         className={`p-2 border-1 border-e-indigo-900 rounded-1xl mt-3 ${
           editable ? 'grid grid-cols-[2fr_1fr] gap-2' : ''
@@ -236,6 +234,7 @@ const EventMap = ({
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
             />
+            {editable && <RecenterMap center={location} />}
             {editable && <ClickToAddMarkers onMapClick={handleMapClick} />}
             {editable &&
               markers.map((position, index) => (
