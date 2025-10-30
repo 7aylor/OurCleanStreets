@@ -69,6 +69,7 @@ export const login = async (_req: Request<{}, {}, IUser>, res: Response) => {
         email: foundUser.email,
         username: foundUser.username,
         userId: foundUser.id,
+        zipcode: foundUser.zipcode,
       },
       accessToken,
     });
@@ -163,6 +164,7 @@ export const signup = async (_req: Request<{}, {}, IUser>, res: Response) => {
         email: newUser.email,
         username: newUser.username,
         userId: newUser.id,
+        zipcode: newUser.zipcode,
       },
       accessToken,
     });

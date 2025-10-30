@@ -45,6 +45,9 @@ const Navbar = () => {
         )}
         {loggedIn && (
           <>
+            <Link to='/dashboard' className='m-2 hover:text-gray-300'>
+              Dashboard
+            </Link>
             <Link to='/activities' className='m-2 hover:text-gray-300'>
               Activities
             </Link>

@@ -5,7 +5,7 @@ import type { RootState } from '../store/store';
 
 export const useAuthenticatedFetch = () => {
   const auth = useSelector((state: RootState) => state.auth);
-  const { accessToken, email, userId, username } = auth;
+  const { accessToken, email, userId, username, zipcode } = auth;
   const dispatch = useDispatch();
 
   const fetchWithAuth = async (endpoint: string, options: RequestInit = {}) => {
@@ -58,6 +58,7 @@ export const useAuthenticatedFetch = () => {
               email,
               userId,
               username,
+              zipcode,
             })
           );
 

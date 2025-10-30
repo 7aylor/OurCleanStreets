@@ -14,6 +14,7 @@ import LogActivity from './components/Activities/LogActivity.tsx';
 import Activities from './components/Activities/Activities.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ActivityDetails from './components/Activities/ActivityDetails.tsx';
+import Dashboard from './components/Dashboard/Dashboard.tsx';
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => {
                 <Route element={<AuthorizedRoute />}>
                   <Route path='/user-profile' element={<UserProfile />} />
                   <Route path='/log-activity' element={<LogActivity />} />
+                  <Route path='/dashboard' element={<Dashboard />} />
                   <Route
                     path='/activity-details/:id'
                     element={<ActivityDetails />}

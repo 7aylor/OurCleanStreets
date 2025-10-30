@@ -1,16 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  Polyline,
-} from 'react-leaflet';
-import ClickToAddMarkers from './HelperComponents/ClickToAddMarkers.tsx';
+import { useEffect, useState } from 'react';
+import { Marker, Popup, Polyline } from 'react-leaflet';
+import ClickToAddMarkers from '../MapParts/ClickToAddMarkers.tsx';
 // @ts-ignore
 import L from 'leaflet';
-import { primaryColors as colors, type NamedColor } from '../../types/types.ts';
-import MarkersTable from './MarkersTable.tsx';
+import {
+  primaryColors as colors,
+  type NamedColor,
+} from '../../../types/types.ts';
+import MarkersTable from '../MarkersTable/MarkersTable.tsx';
 import 'leaflet/dist/leaflet.css';
 import type {
   ICoordinate,
@@ -18,19 +15,18 @@ import type {
   RouteCoordinates,
 } from '@ocs/types';
 import { LoaderCircle } from 'lucide-react';
-import { OCS_API_URL } from '../../helpers/constants.ts';
+import { OCS_API_URL } from '../../../helpers/constants.ts';
 import {
   DEFAULT_BTN,
   DEFAULT_BTN_DISABLED,
   DEFAULT_SPINNER,
-} from '../../helpers/style-contants.ts';
-import { useAuthenticatedFetch } from '../../hooks/useAuthenticateFetch.tsx';
-import { currentRoute } from '../../store/routeSlice.ts';
+} from '../../../helpers/style-contants.ts';
+import { useAuthenticatedFetch } from '../../../hooks/useAuthenticateFetch.tsx';
+import { currentRoute } from '../../../store/routeSlice.ts';
 import { useDispatch } from 'react-redux';
-import { getRouteColorByDate } from '../../helpers/utils.ts';
-import FitMapToRoute from './FitMapToRoute.tsx';
-import { Search } from './Search.tsx';
-import { RecenterMap } from './HelperComponents/RecenterMap.tsx';
+import { Search } from '../MapParts/Search.tsx';
+import { RecenterMap } from '../MapParts/RecenterMap.tsx';
+import Map from '../MapParts/Map.tsx';
 
 const createNumberedIcon = (color: NamedColor, number: number) =>
   new L.DivIcon({
@@ -54,15 +50,7 @@ const createNumberedIcon = (color: NamedColor, number: number) =>
     iconAnchor: [15, 15], // bottom-center
   });
 
-const EventMap = ({
-  editable = true,
-  existingRoute = [],
-  existingDate,
-}: {
-  editable?: boolean;
-  existingRoute?: RouteCoordinates;
-  existingDate?: Date | undefined;
-}) => {
+const EventMap = () => {
   const [markers, setMarkers] = useState<ICoordinate[]>([]);
   const [route, setRoute] = useState<RouteCoordinates>([]);
 
@@ -94,26 +82,10 @@ const EventMap = ({
   };
 
   useEffect(() => {
-    // if (editable) {
     getBrowserLocation();
     // necessary to prevent flicker due to map mounting
     setTimeout(() => setComponentHasMounted(true), 100);
-    // }
   }, []);
-
-  useEffect(() => {
-    if (existingRoute && existingRoute.length > 0) {
-      setRoute(existingRoute);
-    }
-  }, [existingRoute]);
-
-  const routeColor = useMemo(() => {
-    if (existingDate) {
-      return getRouteColorByDate(existingDate);
-    } else {
-      return 'blue';
-    }
-  }, [existingDate]);
 
   const getMapCoordinates = async (coords: ICoordinate[]) => {
     setLoading(true);
@@ -208,61 +180,45 @@ const EventMap = ({
 
   return (
     <>
-      {editable && <Search updateLocation={updateLocation} />}
+      <Search updateLocation={updateLocation} />
       <div
-        className={`p-2 border-1 border-e-indigo-900 rounded-1xl mt-3 ${
-          editable ? 'grid grid-cols-[2fr_1fr] gap-2' : ''
-        }`}
+        className={`p-2 border-1 border-e-indigo-900 rounded-1xl mt-3 grid grid-cols-[2fr_1fr] gap-2`}
       >
         {location && (
-          <MapContainer
+          <Map
             // @ts-ignore
-            center={editable ? location : route[0]}
-            zoom={editable ? 20 : 13}
+            center={location}
+            zoom={20}
             style={{ height: '50vh' }}
-            scrollWheelZoom={editable}
-            dragging={editable}
-            doubleClickZoom={editable}
-            zoomControl={editable}
-            attributionControl={editable}
-            keyboard={editable}
-            touchZoom={editable}
-            boxZoom={editable}
+            editable={true}
           >
-            <TileLayer
-              // @ts-ignore
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-            />
-            {editable && <RecenterMap center={location} />}
-            {editable && <ClickToAddMarkers onMapClick={handleMapClick} />}
-            {editable &&
-              markers.map((position, index) => (
-                <Marker
-                  key={index}
-                  position={position}
-                  eventHandlers={{
-                    click: () => removeMarker(index),
-                  }}
-                  // @ts-ignore
-                  icon={createNumberedIcon(
-                    colors[index % colors.length],
-                    index + 1
-                  )}
-                >
-                  <Popup>Marker {index + 1}</Popup>
-                </Marker>
-              ))}
+            <RecenterMap center={location} />
+            <ClickToAddMarkers onMapClick={handleMapClick} />
+            {markers.map((position, index) => (
+              <Marker
+                key={index}
+                position={position}
+                eventHandlers={{
+                  click: () => removeMarker(index),
+                }}
+                // @ts-ignore
+                icon={createNumberedIcon(
+                  colors[index % colors.length],
+                  index + 1
+                )}
+              >
+                <Popup>Marker {index + 1}</Popup>
+              </Marker>
+            ))}
             <Polyline
               positions={route}
               // @ts-ignore
               weight={5}
-              color={routeColor}
+              color='blue'
             />
-            {existingRoute && <FitMapToRoute route={existingRoute} />}
-          </MapContainer>
+          </Map>
         )}
-        {componentHasMounted && editable && (
+        {componentHasMounted && (
           <div className='w-115 p-2 bg-gray-100'>
             <div className='flex items-center gap-1 mt-2'>
               <button

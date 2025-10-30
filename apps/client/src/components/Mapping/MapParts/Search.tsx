@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react';
-import { OCS_API_URL } from '../../helpers/constants';
-import { DEFAULT_BTN, DEFAULT_INPUT } from '../../helpers/style-contants';
-import { useAuthenticatedFetch } from '../../hooks/useAuthenticateFetch';
+import { OCS_API_URL } from '../../../helpers/constants';
+import { DEFAULT_BTN, DEFAULT_INPUT } from '../../../helpers/style-contants';
+import { useAuthenticatedFetch } from '../../../hooks/useAuthenticateFetch';
 import type { MapSearchMatch, RouteCoordinate } from '@ocs/types';
+import { X } from 'lucide-react';
 
 export const Search = ({
   updateLocation,
@@ -18,6 +19,7 @@ export const Search = ({
   const onSearch = async () => {
     try {
       if (searchRef.current === lastSearchText) {
+        setShowResults(true);
         return;
       }
       const mapUrl = `${OCS_API_URL}/map/search`;
@@ -50,15 +52,27 @@ export const Search = ({
     setShowResults(false);
   };
 
+  const clickX = () => {
+    setShowResults(false);
+  };
+
   return (
     <>
       <div className='flex gap-1'>
-        <input
-          placeholder='Search for Address'
-          className={DEFAULT_INPUT}
-          onChange={(e) => (searchRef.current = e.target.value)}
-          onKeyDown={onKeyDown}
-        />
+        <div className='relative flex-1'>
+          <input
+            placeholder='Search for Address'
+            className={`${DEFAULT_INPUT} pr-8`}
+            onChange={(e) => (searchRef.current = e.target.value)}
+            onKeyDown={onKeyDown}
+          />
+          {showResults && (
+            <X
+              className='absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 hover:cursor-pointer'
+              onClick={clickX}
+            />
+          )}
+        </div>
         <button className={DEFAULT_BTN} onClick={onSearch} type='button'>
           Search
         </button>

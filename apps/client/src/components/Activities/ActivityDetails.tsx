@@ -1,11 +1,14 @@
 import { useParams } from 'react-router-dom';
 import { DEFAULT_H1 } from '../../helpers/style-contants';
-import EventMap from '../Mapping/EventMap';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../store/store';
 import type { IActivity } from '@ocs/types';
 import ActivityFields from './ActivityFields';
+import Map from '../Mapping/MapParts/Map';
+import { Polyline } from 'react-leaflet';
+import { getRouteColorByDate } from '../../helpers/utils';
+import FitMapToRoute from '../Mapping/MapParts/FitMapToRoute';
 
 const ActivityDetails = () => {
   const { id } = useParams();
@@ -28,14 +31,32 @@ const ActivityDetails = () => {
     ? new Date(selectedActivity?.activityDate)
     : new Date();
 
+  const routeColor = useMemo(() => {
+    if (date) {
+      return getRouteColorByDate(date);
+    } else {
+      return 'blue';
+    }
+  }, [date]);
+
+  const route = selectedActivity?.cleanUpRoute?.coordinates;
+
   return (
     <div>
       <h1 className={DEFAULT_H1}>Activity Details</h1>
-      <EventMap
-        editable={false}
-        existingRoute={selectedActivity?.cleanUpRoute.coordinates}
-        existingDate={date}
-      />
+      <Map center={route?.[0]} style={{ height: '50vh' }} editable={false}>
+        {route && (
+          <>
+            <Polyline
+              positions={route}
+              // @ts-ignore
+              weight={5}
+              color={routeColor}
+            />
+            <FitMapToRoute route={route} />
+          </>
+        )}
+      </Map>
       <ActivityFields
         {...selectedActivity}
         {...selectedActivity?.cleanUpRoute}

@@ -41,3 +41,20 @@ export const signupSchema = z.object({
       message: 'Password must contain at least one special character',
     }),
 });
+
+export const logActivitySchema = z.object({
+  userId: z.uuid('Invalid userId'),
+  activityDate: z
+    .string()
+    .refine((val) => !isNaN(Date.parse(val)), 'Invalid date format'),
+  duration: z.number().min(0, 'duration must be non-negative'),
+  distance: z.number().min(0, 'distance must be non-negative'),
+  mostCommonItem: z.string().optional(),
+  coordinates: z
+    .array(z.array(z.number()).length(2)) // [[lat,lng], [lat,lng]]
+    .min(1, 'At least one coordinate is required'),
+});
+
+export const zipcodeSchema = z.object({
+  zipcode: z.string().regex(/^\d{5}(-\d{4})?$/, 'Invalid US ZIP code format'),
+});

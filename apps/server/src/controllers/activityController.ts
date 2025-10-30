@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { getPrismaClient } from '../utils/prisma';
 import type { IActivity } from '@ocs/types';
+import { getOrsGeocode } from '../utils/ors';
+import { logActivitySchema } from '../utils/zod-schemas';
 
 export const getUserActivities = async (req: Request, res: Response) => {
   try {
@@ -28,6 +30,13 @@ export const getUserActivities = async (req: Request, res: Response) => {
 
 export const logActivity = async (req: Request, res: Response) => {
   try {
+    const parseResult = logActivitySchema.safeParse(req.body);
+
+    if (!parseResult.success) {
+      const errorMessages = parseResult.error.issues.map((e) => e.message);
+      return res.status(400).json({ error: errorMessages });
+    }
+
     const {
       coordinates,
       userId,
@@ -35,17 +44,20 @@ export const logActivity = async (req: Request, res: Response) => {
       duration,
       distance,
       mostCommonItem,
-    } = req.body;
+    } = parseResult.data;
 
-    // Basic validation -- TODO: Add Zod Schema
-    if (
-      !userId ||
-      !activityDate ||
-      !coordinates ||
-      !Array.isArray(coordinates)
-    ) {
-      return res.status(400).json({ error: 'Missing or invalid fields.' });
-    }
+    const lat_lng = coordinates[0];
+
+    const geocode = getOrsGeocode();
+
+    const rev = await geocode.reverseGeocode({
+      point: {
+        lat_lng,
+      },
+      size: 1,
+    });
+
+    const zipcode = rev?.features?.[0]?.properties?.postalcode ?? '00000';
 
     const prisma = getPrismaClient();
 
@@ -55,6 +67,7 @@ export const logActivity = async (req: Request, res: Response) => {
         distance,
         duration,
         createdAt: new Date(),
+        zipcode,
       },
     });
 

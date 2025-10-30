@@ -5,6 +5,7 @@ interface AuthState {
   email: string | null;
   userId: string | null;
   username: string | null;
+  zipcode: string | null;
 }
 
 const initialState: AuthState = {
@@ -12,6 +13,7 @@ const initialState: AuthState = {
   email: null,
   userId: null,
   username: null,
+  zipcode: null,
 };
 
 const authSlice = createSlice({
@@ -23,12 +25,14 @@ const authSlice = createSlice({
       state.email = action.payload.email;
       state.userId = action.payload.userId;
       state.username = action.payload.username;
+      state.zipcode = action.payload.zipcode;
     },
     logout: (state) => {
       state.accessToken = null;
       state.email = null;
       state.userId = null;
       state.username = null;
+      state.zipcode = null;
     },
   },
 });

@@ -54,6 +54,7 @@ model CleanUpRoute {
   coordinates Json
   distance    Float
   duration    Float
+  zipcode     String   @db.VarChar(10) @default("00000")
 
   activity Activity?
 

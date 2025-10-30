@@ -3,13 +3,19 @@ import { Request, Response } from 'express';
 import polyline from '@mapbox/polyline';
 import { ICoordinate, IGeocode, RouteCoordinates } from '@ocs/types';
 import { getOrsDirections, getOrsGeocode } from '../utils/ors';
+import { getPrismaClient } from '../utils/prisma';
+import { zipcodeSchema } from '../utils/zod-schemas';
 
-interface CoordsRequestBody {
+interface getRouteRequestBody {
   coordinates: ICoordinate[];
 }
 
+interface getRoutesByZipRequestBody {
+  zipcode: string;
+}
+
 export const getRoute = async (
-  req: Request<{}, {}, CoordsRequestBody>,
+  req: Request<{}, {}, getRouteRequestBody>,
   res: Response
 ) => {
   try {
@@ -40,6 +46,51 @@ export const getRoute = async (
     });
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getRoutesByZip = async (
+  req: Request<{}, {}, getRoutesByZipRequestBody>,
+  res: Response
+) => {
+  try {
+    const parseResult = zipcodeSchema.safeParse(req.body);
+
+    if (!parseResult.success) {
+      const errorMessage = parseResult.error.message;
+      return res.status(400).json({ error: errorMessage });
+    }
+
+    const { zipcode } = parseResult.data;
+
+    const prisma = getPrismaClient();
+
+    // get routes + userId
+    const routes = await prisma.cleanUpRoute.findMany({
+      where: { zipcode },
+      include: {
+        activity: {
+          select: {
+            user: {
+              select: {
+                id: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!routes || routes.length === 0) {
+      return res
+        .status(404)
+        .json({ message: 'No routes found for this zipcode.' });
+    }
+
+    return res.status(200).json(routes);
+  } catch (error) {
+    console.error('Error fetching routes by zipcode:', error);
+    return res.status(500).json({ error: 'Internal server error.' });
   }
 };
 

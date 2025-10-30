@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { DEFAULT_BTN, DEFAULT_H1 } from '../../helpers/style-contants.ts';
-import EventMap from '../Mapping/EventMap.tsx';
+import EventMap from '../Mapping/EventMap/EventMap.tsx';
 import type { RootState } from '../../store/store.ts';
 import { useEffect, useState } from 'react';
 ``;
