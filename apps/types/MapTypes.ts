@@ -27,3 +27,10 @@ export type MapSearchMatch = {
   coordinates: RouteCoordinate;
   country: string;
 };
+
+export type BasicRoute = {
+  activityDate: Date;
+  coordinates: RouteCoordinates | undefined;
+  zipcode: string;
+  userId: string;
+};

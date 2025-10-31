@@ -1,11 +1,14 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { getPrismaClient } from '../utils/prisma';
-import { IUser } from '@ocs/types';
+import { IUserRequest } from '@ocs/types';
 import { loginSchema, signupSchema } from '../utils/zod-schemas';
 import { createAccessToken, createRefreshToken } from '../utils/auth';
 
-export const login = async (_req: Request<{}, {}, IUser>, res: Response) => {
+export const login = async (
+  _req: Request<{}, {}, IUserRequest>,
+  res: Response
+) => {
   try {
     const prisma = getPrismaClient();
     const user = _req.body;
@@ -82,7 +85,10 @@ export const login = async (_req: Request<{}, {}, IUser>, res: Response) => {
   }
 };
 
-export const signup = async (_req: Request<{}, {}, IUser>, res: Response) => {
+export const signup = async (
+  _req: Request<{}, {}, IUserRequest>,
+  res: Response
+) => {
   try {
     const prisma = getPrismaClient();
     const user = _req.body;
@@ -177,7 +183,10 @@ export const signup = async (_req: Request<{}, {}, IUser>, res: Response) => {
   }
 };
 
-export const refresh = async (_req: Request<{}, {}, IUser>, res: Response) => {
+export const refresh = async (
+  _req: Request<{}, {}, IUserRequest>,
+  res: Response
+) => {
   try {
     const token = _req.cookies.refreshToken;
     if (!token) return res.sendStatus(401);
@@ -207,7 +216,10 @@ export const refresh = async (_req: Request<{}, {}, IUser>, res: Response) => {
   }
 };
 
-export const logout = async (_req: Request<{}, {}, IUser>, res: Response) => {
+export const logout = async (
+  _req: Request<{}, {}, IUserRequest>,
+  res: Response
+) => {
   try {
     const token = _req.cookies.refreshToken;
     if (token) {
