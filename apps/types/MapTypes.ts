@@ -28,9 +28,12 @@ export type MapSearchMatch = {
   country: string;
 };
 
-export type BasicRoute = {
+export type DashboardData = {
   activityDate: Date;
   coordinates: RouteCoordinates | undefined;
   zipcode: string;
   userId: string;
+  distance: number;
+  duration: number;
+  trashWeight: number;
 };

@@ -44,6 +44,7 @@ export const logActivity = async (req: Request, res: Response) => {
       duration,
       distance,
       mostCommonItem,
+      trashWeight,
     } = parseResult.data;
 
     const lat_lng = coordinates[0];
@@ -79,6 +80,7 @@ export const logActivity = async (req: Request, res: Response) => {
         cleanUpRouteId: cleanUpRoute.id,
         createdAt: new Date(),
         updatedAt: new Date(),
+        trashWeight: trashWeight ?? 0,
       },
       include: {
         cleanUpRoute: true,

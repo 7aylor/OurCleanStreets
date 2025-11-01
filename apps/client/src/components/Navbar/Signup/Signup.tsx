@@ -71,6 +71,7 @@ const Signup: React.FC = () => {
             email: data.user.email,
             userId: data.user.userId,
             username: data.user.username,
+            zipcode: data.user.zipcode,
           })
         );
         navigate('/user-profile');

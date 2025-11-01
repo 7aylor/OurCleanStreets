@@ -28,6 +28,7 @@ export const useAuthenticateOnLoad = () => {
               email: data.email,
               userId: data.userId,
               username: data.username,
+              zipcode: data.zipcode,
             })
           );
           navigate(localStorage.getItem('lastRoute') ?? '/user-profile');

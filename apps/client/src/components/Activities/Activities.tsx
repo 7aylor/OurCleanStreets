@@ -12,6 +12,10 @@ import { useQuery } from '@tanstack/react-query';
 import type { IActivity } from '@ocs/types';
 import { useDispatch } from 'react-redux';
 import { setActivities } from '../../store/activitiesSlice';
+import {
+  getFormattedDistance,
+  getFormattedDuration,
+} from '../../helpers/utils';
 
 const Activities: React.FC = () => {
   const dispatch = useDispatch();
@@ -47,8 +51,9 @@ const Activities: React.FC = () => {
           id: a.id,
           activityDate: date,
           mostCommonItem: a.mostCommonItem,
-          duration: a.cleanUpRoute.duration,
-          distance: a.cleanUpRoute.distance,
+          trashWeight: a.trashWeight,
+          duration: getFormattedDuration(a.cleanUpRoute.duration),
+          distance: getFormattedDistance(a.cleanUpRoute.distance),
           startLocation,
           endLocation,
           key: coordinates?.join(','),
@@ -73,6 +78,7 @@ const Activities: React.FC = () => {
               <tr>
                 <th className='px-4 py-2 text-left'>Activity Date</th>
                 <th className='px-4 py-2 text-left'>Most Common Item</th>
+                <th className='px-4 py-2 text-left'>Est. Weight (lbs)</th>
                 <th className='px-4 py-2 text-left'>Duration</th>
                 <th className='px-4 py-2 text-left'>Distance</th>
                 <th className='px-4 py-2 text-left'>Start Location</th>
@@ -88,6 +94,7 @@ const Activities: React.FC = () => {
                     </Link>
                   </td>
                   <td className='px-4 py-2'>{a.mostCommonItem}</td>
+                  <td className='px-4 py-2'>{a.trashWeight}</td>
                   <td className='px-4 py-2'>{a.duration}</td>
                   <td className='px-4 py-2'>{a.distance}</td>
                   <td className='px-4 py-2'>{a.startLocation?.join(', ')}</td>

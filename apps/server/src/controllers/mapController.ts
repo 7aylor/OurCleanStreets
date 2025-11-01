@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 // @ts-ignore
 import polyline from '@mapbox/polyline';
 import {
-  BasicRoute,
+  DashboardData,
   ICoordinate,
   IGeocode,
   RouteCoordinates,
@@ -56,7 +56,7 @@ export const getRoute = async (
 
 export const getRoutesByZipcode = async (
   req: Request<{}, {}, getRoutesByZipRequestBody>,
-  res: Response<{}, BasicRoute[]>
+  res: Response<{}, DashboardData[]>
 ) => {
   try {
     const parseResult = zipcodeSchema.safeParse(req.body);
@@ -77,6 +77,7 @@ export const getRoutesByZipcode = async (
         activity: {
           select: {
             activityDate: true,
+            trashWeight: true,
             user: {
               select: {
                 id: true,
@@ -87,11 +88,11 @@ export const getRoutesByZipcode = async (
       },
     });
 
-    const formattedRoutes = routes.map((r) => ({
-      activityDate: r.activity?.activityDate,
-      coordinates: r.coordinates,
-      zipcode: r.zipcode,
-      userId: r.activity?.user?.id ?? null,
+    const formattedRoutes = routes.map(({ activity, ...rest }) => ({
+      activityDate: activity?.activityDate,
+      trashWeight: activity?.trashWeight,
+      userId: activity?.user?.id ?? null,
+      ...rest,
     }));
 
     if (!formattedRoutes || formattedRoutes.length === 0) {

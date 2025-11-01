@@ -38,6 +38,8 @@ model Activity {
   activityDate   DateTime
   mostCommonItem String?
   cleanUpRouteId Int      @unique
+  trashWeight         Float?
+  trashWeightUnit     WeightUnit @default(POUNDS)
 
   user         User         @relation(fields: [userId], references: [id])
   cleanUpRoute CleanUpRoute @relation(fields: [cleanUpRouteId], references: [id])
@@ -46,6 +48,11 @@ model Activity {
   updatedAt DateTime @default(now())
 
   @@map("Activities")
+}
+
+enum WeightUnit {
+  POUNDS
+  KILOGRAMS
 }
 
 model CleanUpRoute {

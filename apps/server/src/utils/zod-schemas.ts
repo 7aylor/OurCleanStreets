@@ -50,6 +50,7 @@ export const logActivitySchema = z.object({
   duration: z.number().min(0, 'duration must be non-negative'),
   distance: z.number().min(0, 'distance must be non-negative'),
   mostCommonItem: z.string().optional(),
+  trashWeight: z.number().optional(),
   coordinates: z
     .array(z.array(z.number()).length(2)) // [[lat,lng], [lat,lng]]
     .min(1, 'At least one coordinate is required'),

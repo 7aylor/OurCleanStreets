@@ -6,9 +6,17 @@ import Map from '../Mapping/MapParts/Map';
 import type { LatLngBoundsExpression } from 'leaflet';
 import { OCS_API_URL } from '../../helpers/constants';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticateFetch';
-import type { BasicRoute, RouteCoordinate, RouteCoordinates } from '@ocs/types';
+import type {
+  DashboardData,
+  RouteCoordinate,
+  RouteCoordinates,
+} from '@ocs/types';
 import { Polyline } from 'react-leaflet';
-import { getRouteColorByDate } from '../../helpers/utils';
+import {
+  getFormattedDistance,
+  getFormattedDuration,
+  getRouteColorByDate,
+} from '../../helpers/utils';
 
 type DashboardRoute = {
   coordinates: RouteCoordinates;
@@ -21,8 +29,9 @@ const Dashboard: React.FC = () => {
   const [center, setCenter] = useState<RouteCoordinate | null>(null);
   const authenticatedFetch = useAuthenticatedFetch();
   const [routes, setRoutes] = useState<DashboardRoute[]>([]);
-
-  console.log(auth);
+  const [totalDuration, setTotalDuration] = useState('');
+  const [totalDistance, setTotalDistance] = useState('');
+  const [totalTrashWeight, setTotalTrashWeight] = useState(0);
 
   const { zipcode } = auth;
 
@@ -35,7 +44,7 @@ const Dashboard: React.FC = () => {
         });
 
         if (response.ok) {
-          const json = (await response.json()) as BasicRoute[];
+          const json = (await response.json()) as DashboardData[];
           console.log(json);
 
           const resRoutes: DashboardRoute[] = json
@@ -52,6 +61,9 @@ const Dashboard: React.FC = () => {
             });
 
           setRoutes(resRoutes);
+          calculateTotalDistance(json);
+          calculateTotalDuration(json);
+          calculateTotalWeight(json);
 
           getCenterPoint(json);
         } else {
@@ -67,7 +79,7 @@ const Dashboard: React.FC = () => {
     fetchDashboard();
   }, []);
 
-  const getCenterPoint = (activities: BasicRoute[]) => {
+  const getCenterPoint = (activities: DashboardData[]) => {
     const allPoints = activities.flatMap((r) => r.coordinates ?? []);
 
     if (allPoints.length === 0) return null;
@@ -82,8 +94,75 @@ const Dashboard: React.FC = () => {
     setCenter(center);
   };
 
+  const calculateTotalDistance = (activities: DashboardData[]) => {
+    const total: number = activities.reduce(
+      (acc: number, curr: DashboardData) => {
+        return acc + curr.distance;
+      },
+      0
+    );
+
+    const miles = getFormattedDistance(total);
+    setTotalDistance(miles);
+  };
+
+  const calculateTotalDuration = (activities: DashboardData[]) => {
+    const total: number = activities.reduce(
+      (acc: number, curr: DashboardData) => {
+        return acc + curr.duration;
+      },
+      0
+    );
+
+    const duration = getFormattedDuration(total);
+    setTotalDuration(duration);
+  };
+
+  const calculateTotalWeight = (activities: DashboardData[]) => {
+    const total: number = activities.reduce(
+      (acc: number, curr: DashboardData) => {
+        return acc + curr.trashWeight;
+      },
+      0
+    );
+
+    setTotalTrashWeight(total);
+  };
+
   return (
     <>
+      <div className='mb-2 bg-white shadow-md rounded-2xl p-4 border border-gray-100'>
+        <h2 className='text-3xl text-center font-semibold text-gray-800 mb-2'>
+          Community Contributions - {zipcode}
+        </h2>
+        <hr className='mb-4 border-gray-200' />
+        <div className='grid grid-cols-3 gap-6 text-center'>
+          <div className='bg-gray-100 rounded-xl p-4'>
+            <h3 className='text-sm font-medium text-gray-500 uppercase tracking-wide'>
+              Trash Collected (lbs)
+            </h3>
+            <p className='text-2xl font-semibold text-gray-800 mt-1'>
+              {totalTrashWeight}
+            </p>
+          </div>
+          <div className='bg-gray-100 rounded-xl p-4'>
+            <h3 className='text-sm font-medium text-gray-500 uppercase tracking-wide'>
+              Total Cleanup Time
+            </h3>
+            <p className='text-2xl font-semibold text-gray-800 mt-1'>
+              {totalDuration}
+            </p>
+          </div>
+          <div className='bg-gray-100 rounded-xl p-4'>
+            <h3 className='text-sm font-medium text-gray-500 uppercase tracking-wide'>
+              Total Cleanup Distance
+            </h3>
+            <p className='text-2xl font-semibold text-gray-800 mt-1'>
+              {totalDistance}
+            </p>
+          </div>
+        </div>
+      </div>
       {center && (
         <Map
           editable={true}

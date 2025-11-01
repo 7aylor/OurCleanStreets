@@ -18,6 +18,7 @@ const LogActivity = () => {
 
   const [activityDate, setActivityDate] = useState('');
   const [mostCommonItem, setMostCommonItem] = useState('');
+  const [trashWeight, setTrashWeight] = useState(0);
   const authenticatedFetch = useAuthenticatedFetch();
 
   const dispatch = useDispatch();
@@ -59,6 +60,8 @@ const LogActivity = () => {
     setActivityDate(e.target.value);
   const onMostCommonItemChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setMostCommonItem(e.target.value);
+  const onTrashWeightChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setTrashWeight(Number(e.target.value));
 
   return (
     <div>
@@ -73,9 +76,11 @@ const LogActivity = () => {
           mostCommonItem={mostCommonItem}
           distance={distance}
           duration={duration}
+          trashWeight={trashWeight}
           events={{
             activityDateChange: onActivityDateChange,
             mostCommonItemChange: onMostCommonItemChange,
+            trashWeightChange: onTrashWeightChange,
           }}
           readonly={false}
         />

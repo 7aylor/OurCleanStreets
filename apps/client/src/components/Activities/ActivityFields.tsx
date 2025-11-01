@@ -1,13 +1,16 @@
-import { useMemo } from 'react';
 import {
   DEFAULT_INPUT,
   DEFAULT_INPUT_LABEL,
 } from '../../helpers/style-contants';
-import { getDurationParts } from '../../helpers/constants';
+import {
+  getFormattedDistance,
+  getFormattedDuration,
+} from '../../helpers/utils';
 
 const ActivityFields = ({
   activityDate,
   mostCommonItem,
+  trashWeight,
   duration,
   distance,
   events,
@@ -15,22 +18,18 @@ const ActivityFields = ({
 }: {
   activityDate?: string;
   mostCommonItem?: string;
+  trashWeight?: number;
   duration?: number;
   distance?: number;
   events?: {
     activityDateChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     mostCommonItemChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    trashWeightChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   };
   readonly?: boolean;
 }) => {
-  const formattedDuration = useMemo(() => {
-    const { hours, minutes, seconds } = getDurationParts(duration ?? 0);
-    return `${hours}h ${minutes}m ${seconds}s`;
-  }, [duration]);
-
-  const formattedDistance = useMemo(() => `${duration}m`, [duration]);
   return (
-    <div className='grid grid-cols-4 gap-3 mt-3'>
+    <div className='grid grid-cols-5 gap-3 mt-3'>
       <div>
         <label className={DEFAULT_INPUT_LABEL}>Date:</label>
         <input
@@ -53,13 +52,23 @@ const ActivityFields = ({
         />
       </div>
       <div>
+        <label className={DEFAULT_INPUT_LABEL}>Trash Weight (lbs)</label>
+        <input
+          type='number'
+          onChange={events && events.trashWeightChange}
+          className={`${DEFAULT_INPUT}`}
+          value={trashWeight ?? ''}
+          disabled={readonly}
+        />
+      </div>
+      <div>
         <label className={DEFAULT_INPUT_LABEL}>Distance:</label>
         <input
           type='text'
           className={`${DEFAULT_INPUT} border-black text-gray-400`}
           placeholder='To be calculated...'
           disabled
-          value={distance && distance > 0 ? formattedDistance : ''}
+          value={distance && distance > 0 ? getFormattedDistance(distance) : ''}
         />
       </div>
       <div>
@@ -69,7 +78,7 @@ const ActivityFields = ({
           className={`${DEFAULT_INPUT} border-black text-gray-400`}
           placeholder='To be calculated...'
           disabled
-          value={duration && duration > 0 ? formattedDuration : ''}
+          value={duration && duration > 0 ? getFormattedDuration(duration) : ''}
         />
       </div>
     </div>

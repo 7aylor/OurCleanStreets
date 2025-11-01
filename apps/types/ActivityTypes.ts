@@ -10,6 +10,7 @@ export interface IActivity {
   activityDate: string;
   mostCommonItem: string | undefined;
   cleanUpRouteId: number;
+  trashWeight: number;
   createdAt: string;
   updatedAt: string;
   cleanUpRoute: ICleanUpRoute;

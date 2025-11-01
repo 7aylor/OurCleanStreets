@@ -22,6 +22,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.90.2
         version: 5.90.2(react@19.1.1)
+      convert:
+        specifier: ^5.13.1
+        version: 5.13.1
       leaflet:
         specifier: ^1.9.4
         version: 1.9.4
@@ -1324,6 +1327,9 @@ packages:
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
+
+  convert@5.13.1:
+    resolution: {integrity: sha512-LB7K75X/D7Xp9ZYhNrjcny8kr+xzlDcw/KK6lccXrHhxvr2E/LO/UtlYRZRdpAVb9xe5uEBY++uish8Rz5+9IQ==}
 
   cookie-parser@1.4.7:
     resolution: {integrity: sha512-nGUvgXnotP3BsjiLX2ypbQnWoGUPIIfHQNZkkC668ntrzGWEZVW70HDEB1qnNGMicPje6EttlIgzo51YSwNQGw==}
@@ -4193,6 +4199,8 @@ snapshots:
   content-type@1.0.5: {}
 
   convert-source-map@2.0.0: {}
+
+  convert@5.13.1: {}
 
   cookie-parser@1.4.7:
     dependencies:
