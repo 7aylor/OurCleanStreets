@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getPrismaClient } from '../utils/prisma';
-import type { IActivity } from '@ocs/types';
+import type { GeocodeResult, IActivity } from '@ocs/types';
 import { getOrsGeocode } from '../utils/ors';
 import { logActivitySchema } from '../utils/zod-schemas';
 
@@ -51,14 +51,17 @@ export const logActivity = async (req: Request, res: Response) => {
 
     const geocode = getOrsGeocode();
 
-    const rev = await geocode.reverseGeocode({
+    const rev: GeocodeResult = await geocode.reverseGeocode({
       point: {
         lat_lng,
       },
-      size: 1,
     });
 
-    const zipcode = rev?.features?.[0]?.properties?.postalcode ?? '00000';
+    const featureWithZipcode = rev?.features?.find(
+      (f) => f.properties?.postalcode
+    );
+
+    const zipcode = featureWithZipcode?.properties?.postalcode ?? '00000';
 
     const prisma = getPrismaClient();
 

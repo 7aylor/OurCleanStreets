@@ -209,6 +209,7 @@ export const refresh = async (
       userId: dbRefreshToken.userId,
       username: dbRefreshToken.user.username,
       email: dbRefreshToken.user.email,
+      zipcde: dbRefreshToken.user.zipcode,
     });
   } catch (e) {
     console.log(e);

@@ -37,3 +37,13 @@ export type DashboardData = {
   duration: number;
   trashWeight: number;
 };
+
+export type GeocodeResult = {
+  features: GeocodeFeature[];
+};
+
+export type GeocodeFeature = {
+  properties?: {
+    postalcode?: string;
+  };
+};
