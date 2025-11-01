@@ -65,7 +65,6 @@ const Dashboard: React.FC = () => {
 
         if (response.ok) {
           const json = (await response.json()) as DashboardData[];
-          console.log(json);
 
           const resRoutes: DashboardRoute[] = json
             .sort(

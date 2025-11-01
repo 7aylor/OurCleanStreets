@@ -39,7 +39,6 @@ const LogActivity = () => {
       mostCommonItem,
       trashWeight,
     };
-    console.log(payload);
 
     const mapUrl = `${OCS_API_URL}/activity/log-activity`;
 
