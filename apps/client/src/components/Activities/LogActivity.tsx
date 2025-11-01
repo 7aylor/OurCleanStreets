@@ -35,8 +35,9 @@ const LogActivity = () => {
       coordinates,
       distance,
       duration,
-      activityDate: activityDate,
-      mostCommonItem: mostCommonItem,
+      activityDate,
+      mostCommonItem,
+      trashWeight,
     };
     console.log(payload);
 

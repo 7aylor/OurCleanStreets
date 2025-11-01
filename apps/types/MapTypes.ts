@@ -30,7 +30,7 @@ export type MapSearchMatch = {
 
 export type DashboardData = {
   activityDate: Date;
-  coordinates: RouteCoordinates | undefined;
+  coordinates: RouteCoordinate[] | undefined;
   zipcode: string;
   userId: string;
   distance: number;
