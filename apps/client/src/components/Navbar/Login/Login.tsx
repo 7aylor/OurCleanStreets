@@ -62,7 +62,7 @@ const Login: React.FC = () => {
             zipcode: data.user.zipcode,
           })
         );
-        navigate('/user-profile');
+        navigate('/dashboard');
       } else {
         const data = await response.json();
         if (data.success === false && data.errors?.length > 0) {
