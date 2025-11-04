@@ -8,6 +8,7 @@ import {
   DEFAULT_INPUT,
 } from '../../helpers/style-contants';
 import { OCS_API_URL } from '../../helpers/constants';
+import Achievements from './Achievements/Achievements';
 
 const UserProfile = () => {
   const { username } = useSelector((state: RootState) => state.auth);
@@ -146,6 +147,7 @@ const UserProfile = () => {
           {resetPasswordStatus}
         </p>
       )}
+      <Achievements />
     </div>
   );
 };
