@@ -1,0 +1,9 @@
+{
+  "name": "@ocs/library",
+  "version": "1.0.0",
+  "description": "shared functions for OCS monorepo",
+  "type": "module",
+  "dependencies": {
+    "convert": "^5.13.1"
+  }
+}

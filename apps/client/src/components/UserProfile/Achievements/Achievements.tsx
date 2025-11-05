@@ -114,6 +114,9 @@ const Achievements: React.FC = () => {
           />
         </div>
       </div>
+      <div className='flex'>
+        {achievements && achievements?.map((a) => <Badge {...a} />)}
+      </div>
     </div>
   );
 };
