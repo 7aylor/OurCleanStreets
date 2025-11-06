@@ -1,6 +1,6 @@
 export type AchievementType = 'weight' | 'distance' | 'duration';
 
-export type AchievementName = 'Trash Collector' | 'Traveler' | 'Timekeeper';
+export type AchievementName = 'Trash Collector' | 'Traveler' | 'Time Keeper';
 
 export type AchievementLevelNames =
   | 'Newbie'
@@ -15,8 +15,9 @@ export type AchievementLevelNames =
 
 export interface Achievement {
   type: AchievementType;
+  category: AchievementName;
   level: number;
   value: number; // the value of the achievement type, e.g. total duration, distance, etc
   nextLevel: number; // value to the next level
-  label: AchievementName;
+  label: string;
 }

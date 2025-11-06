@@ -1,6 +1,1 @@
-export {
-  convertDistance,
-  getDurationParts,
-  getFormattedDistance,
-  getFormattedDuration,
-} from './src/conversion-utils';
+export * from './src/conversion-utils.js';

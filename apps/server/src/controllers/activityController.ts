@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getPrismaClient } from '../utils/prisma';
-import type { GeocodeResult, IActivity } from '@ocs/types';
+import type { Achievement, GeocodeResult, IActivity } from '@ocs/types';
 import { getOrsGeocode } from '../utils/ors';
 import { logActivitySchema } from '../utils/zod-schemas';
 import { ACHIEVEMENT_CONFIG } from '../config/achievements.config';
@@ -141,26 +141,32 @@ export const getUserStats = async (req: Request, res: Response) => {
       (w) => totalWeight > w.min && totalWeight < w.max
     );
 
-    const stats = {
-      distance: {
+    const stats: Achievement[] = [
+      {
+        type: 'distance',
+        category: 'Traveler',
         level: distanceConfig?.level ?? 1,
         value: miles,
-        nextLevel: distanceConfig?.max,
-        label: distanceConfig?.label,
+        nextLevel: distanceConfig?.max ?? 0,
+        label: distanceConfig?.label ?? '',
       },
-      duration: {
+      {
+        type: 'duration',
+        category: 'Time Keeper',
         level: durationConfig?.level ?? 1,
         value: hours + minutes / 60 + seconds / 60 / 60,
-        nextLevel: durationConfig?.max,
-        label: durationConfig?.label,
+        nextLevel: durationConfig?.max ?? 0,
+        label: durationConfig?.label ?? '',
       },
-      weight: {
+      {
+        type: 'weight',
+        category: 'Trash Collector',
         level: weightConfig?.level ?? 1,
         value: totalWeight,
-        nextLevel: weightConfig?.max,
-        label: weightConfig?.label,
+        nextLevel: weightConfig?.max ?? 0,
+        label: weightConfig?.label ?? '',
       },
-    };
+    ];
 
     return res.status(200).json(stats);
   } catch (error) {

@@ -3,7 +3,13 @@
   "version": "1.0.0",
   "description": "shared functions for OCS monorepo",
   "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  },
   "dependencies": {
-    "convert": "^5.13.1"
+    "convert-units": "^2.3.4"
   }
 }
