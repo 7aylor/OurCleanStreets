@@ -53,7 +53,7 @@ const Activities: React.FC = () => {
           distance: getFormattedDistance(a.cleanUpRoute.distance),
           startLocation,
           endLocation,
-          key: coordinates?.join(','),
+          key: crypto.randomUUID(),
         };
       });
     }

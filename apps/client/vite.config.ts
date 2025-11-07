@@ -10,4 +10,7 @@ export default defineConfig({
     sourcemap: false,
   },
   base: './',
+  define: {
+    global: 'globalThis', // tell Vite to replace all `global` references
+  },
 });

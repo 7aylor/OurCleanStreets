@@ -9,9 +9,10 @@ import { useAuthenticatedFetch } from '../../hooks/useAuthenticateFetch';
 import type { DashboardData, RouteCoordinate } from '@ocs/types';
 import { Polyline } from 'react-leaflet';
 import { getRouteColorByDate } from '../../helpers/utils';
-import { Check, Edit, X } from 'lucide-react';
+import { Check, Edit, LoaderCircle, X } from 'lucide-react';
 import FitMapToRoute from '../Mapping/MapParts/FitMapToRoute';
 import { getFormattedDistance, getFormattedDuration } from '@ocs/library';
+import { DEFAULT_SPINNER } from '../../helpers/style-contants';
 
 type DashboardRoute = {
   coordinates: RouteCoordinate[];
@@ -28,8 +29,9 @@ const Dashboard: React.FC = () => {
   const [totalDistance, setTotalDistance] = useState('');
   const [totalTrashWeight, setTotalTrashWeight] = useState(0);
   const [zipcodeError, setZipcodeError] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditingZipcode, setIsEditingZipcode] = useState(false);
 
   const { zipcode } = auth;
 
@@ -40,7 +42,7 @@ const Dashboard: React.FC = () => {
     if (/^\d{5}$/.test(tempZip ?? '')) {
       setZipcodeError('');
       setSelectedZipcode(tempZip ?? '');
-      setIsEditing(false);
+      setIsEditingZipcode(false);
     } else {
       setZipcodeError('Invalid zipcode');
     }
@@ -49,12 +51,13 @@ const Dashboard: React.FC = () => {
   const handleCancel = () => {
     setTempZip(selectedZipcode);
     setZipcodeError('');
-    setIsEditing(false);
+    setIsEditingZipcode(false);
   };
 
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
+        setIsLoading(true);
         const mapUrl = `${OCS_API_URL}/map/get-routes-by-zipcode`;
         const response = await authenticatedFetch(mapUrl, {
           body: JSON.stringify({ zipcode: selectedZipcode }),
@@ -93,7 +96,7 @@ const Dashboard: React.FC = () => {
       } catch (err) {
         console.error('Error fetching dashboard data:', err);
       } finally {
-        // setIsLoading(false);
+        setIsLoading(false);
       }
     };
 
@@ -157,7 +160,7 @@ const Dashboard: React.FC = () => {
           <span>Community Contributions -</span>
 
           <span className='flex items-center gap-1'>
-            {isEditing ? (
+            {isEditingZipcode ? (
               <>
                 <input
                   type='text'
@@ -181,7 +184,7 @@ const Dashboard: React.FC = () => {
                 <span>{selectedZipcode}</span>
                 <Edit
                   className='w-5 h-5 text-gray-600 hover:text-gray-800 cursor-pointer'
-                  onClick={() => setIsEditing(true)}
+                  onClick={() => setIsEditingZipcode(true)}
                 />
               </>
             )}
@@ -196,25 +199,37 @@ const Dashboard: React.FC = () => {
             <h3 className='text-sm font-medium text-gray-500 uppercase tracking-wide'>
               Trash Collected (lbs)
             </h3>
-            <p className='text-2xl font-semibold text-gray-800 mt-1'>
-              {totalTrashWeight}
-            </p>
+            {isLoading ? (
+              <LoaderCircle className={`${DEFAULT_SPINNER} w-full mt-2`} />
+            ) : (
+              <p className='text-2xl font-semibold text-gray-800 mt-1'>
+                {totalTrashWeight}
+              </p>
+            )}
           </div>
           <div className='bg-gray-100 rounded-xl p-4'>
             <h3 className='text-sm font-medium text-gray-500 uppercase tracking-wide'>
               Total Cleanup Time
             </h3>
-            <p className='text-2xl font-semibold text-gray-800 mt-1'>
-              {totalDuration}
-            </p>
+            {isLoading ? (
+              <LoaderCircle className={`${DEFAULT_SPINNER} w-full mt-2`} />
+            ) : (
+              <p className='text-2xl font-semibold text-gray-800 mt-1'>
+                {totalDuration}
+              </p>
+            )}
           </div>
           <div className='bg-gray-100 rounded-xl p-4'>
             <h3 className='text-sm font-medium text-gray-500 uppercase tracking-wide'>
               Total Cleanup Distance
             </h3>
-            <p className='text-2xl font-semibold text-gray-800 mt-1'>
-              {totalDistance}
-            </p>
+            {isLoading ? (
+              <LoaderCircle className={`${DEFAULT_SPINNER} w-full mt-2`} />
+            ) : (
+              <p className='text-2xl font-semibold text-gray-800 mt-1'>
+                {totalDistance}
+              </p>
+            )}
           </div>
         </div>
       </div>
