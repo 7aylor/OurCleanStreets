@@ -8,13 +8,10 @@ import { OCS_API_URL } from '../../helpers/constants';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticateFetch';
 import type { DashboardData, RouteCoordinate } from '@ocs/types';
 import { Polyline } from 'react-leaflet';
-import {
-  getFormattedDistance,
-  getFormattedDuration,
-  getRouteColorByDate,
-} from '../../helpers/utils';
+import { getRouteColorByDate } from '../../helpers/utils';
 import { Check, Edit, X } from 'lucide-react';
 import FitMapToRoute from '../Mapping/MapParts/FitMapToRoute';
+import { getFormattedDistance, getFormattedDuration } from '@ocs/library';
 
 type DashboardRoute = {
   coordinates: RouteCoordinate[];

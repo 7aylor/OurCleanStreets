@@ -25,9 +25,6 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.90.2
         version: 5.90.2(react@19.1.1)
-      convert:
-        specifier: ^5.13.1
-        version: 5.13.1
       leaflet:
         specifier: ^1.9.4
         version: 1.9.4
@@ -1349,9 +1346,6 @@ packages:
 
   convert-units@2.3.4:
     resolution: {integrity: sha512-ERHfdA0UhHJp1IpwE6PnFJx8LqG7B1ZjJ20UvVCmopEnVCfER68Tbe3kvN63dLbYXDA2xFWRE6zd4Wsf0w7POg==}
-
-  convert@5.13.1:
-    resolution: {integrity: sha512-LB7K75X/D7Xp9ZYhNrjcny8kr+xzlDcw/KK6lccXrHhxvr2E/LO/UtlYRZRdpAVb9xe5uEBY++uish8Rz5+9IQ==}
 
   cookie-parser@1.4.7:
     resolution: {integrity: sha512-nGUvgXnotP3BsjiLX2ypbQnWoGUPIIfHQNZkkC668ntrzGWEZVW70HDEB1qnNGMicPje6EttlIgzo51YSwNQGw==}
@@ -4294,8 +4288,6 @@ snapshots:
     dependencies:
       lodash.foreach: 2.3.0
       lodash.keys: 2.3.0
-
-  convert@5.13.1: {}
 
   cookie-parser@1.4.7:
     dependencies:

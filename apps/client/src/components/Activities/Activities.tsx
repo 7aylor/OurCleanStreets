@@ -12,10 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 import type { IActivity } from '@ocs/types';
 import { useDispatch } from 'react-redux';
 import { setActivities } from '../../store/activitiesSlice';
-import {
-  getFormattedDistance,
-  getFormattedDuration,
-} from '../../helpers/utils';
+import { getFormattedDistance, getFormattedDuration } from '@ocs/library';
 
 const Activities: React.FC = () => {
   const dispatch = useDispatch();

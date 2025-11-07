@@ -1,11 +1,8 @@
+import { getFormattedDistance, getFormattedDuration } from '@ocs/library';
 import {
   DEFAULT_INPUT,
   DEFAULT_INPUT_LABEL,
 } from '../../helpers/style-contants';
-import {
-  getFormattedDistance,
-  getFormattedDuration,
-} from '../../helpers/utils';
 
 const ActivityFields = ({
   activityDate,
