@@ -94,7 +94,7 @@ export const Badge: React.FC<Achievement> = ({
   const { levelColor, iconColor, progressColor } = getLevelData(level);
 
   return (
-    <div className='p-10 m-10 border-1 border-slate-600 rounded-2xl'>
+    <div className='p-10 m-5 border-1 border-slate-600 rounded-2xl'>
       <h2 className='text-2xl text-center mb-5 font-serif'>{category}</h2>
       <div
         className={`flex flex-col items-center justify-center rounded-2xl shadow-md border p-4 m-1 w-40 h-50 transition-all duration-300 text-white ${levelColor}`}

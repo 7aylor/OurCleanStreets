@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { getPrismaClient } from '../utils/prisma';
 import bcrypt from 'bcryptjs';
-import { loginSchema } from '../utils/zod-schemas';
+import { loginSchema, passwordSchema } from '../utils/zod-schemas';
 
 export const resetPassword = async (req: Request, res: Response) => {
   try {
@@ -23,7 +23,7 @@ export const resetPassword = async (req: Request, res: Response) => {
         .json({ success: false, message: 'User not found' });
     }
 
-    const parseResult = loginSchema.safeParse(user);
+    const parseResult = passwordSchema.safeParse(newPassword);
 
     if (!parseResult.success) {
       return res.status(400).json({

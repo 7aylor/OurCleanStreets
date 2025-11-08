@@ -15,6 +15,7 @@ import Activities from './components/Activities/Activities.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ActivityDetails from './components/Activities/ActivityDetails.tsx';
 import Dashboard from './components/Dashboard/Dashboard.tsx';
+import ResetPassword from './components/Navbar/ResetPassword/ResetPassword.tsx';
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ const App = () => {
                     element={<ActivityDetails />}
                   />
                   <Route path='/activities' element={<Activities />} />
+                  <Route path='/reset-password' element={<ResetPassword />} />
                 </Route>
               </Route>
             </Routes>
