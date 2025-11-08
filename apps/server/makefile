@@ -1,6 +1,6 @@
 # Makefile for OCS Docker app
 
-APP_NAME = forkedupduck/ocs-server:0.4.3
+APP_NAME = forkedupduck/ocs-server:0.4.6
 
 # Build the Docker image
 build:
