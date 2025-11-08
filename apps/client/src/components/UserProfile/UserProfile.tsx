@@ -8,10 +8,12 @@ const UserProfile = () => {
 
   return (
     <>
-      <div className='border-2 bg-purple-800 rounded-lg text-white p-5 w-min absolute h-7/8'>
-        <CircleUser size={75} />
-        <p className='text-2xl font-bold'>{username}</p>
-        <p>{zipcode}</p>
+      <div className='border-2 bg-blue-900 rounded-lg text-white p-5 flex align-middle mb-3'>
+        <CircleUser size={50} />
+        <div className='ml-3'>
+          <p className='text-xl font-bold'>{username}</p>
+          <p>{zipcode}</p>
+        </div>
       </div>
       <Achievements />
     </>

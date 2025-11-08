@@ -1,5 +1,4 @@
 import type { ICoordinate } from '@ocs/types';
-import './MarkersTable.css';
 import { ArrowDown, ArrowUp, Trash2 } from 'lucide-react';
 
 const MarkersTable = ({
@@ -12,36 +11,60 @@ const MarkersTable = ({
   moveMarker: (index: number, dir: 'up' | 'down') => void;
 }) => {
   return (
-    <div className=' h-64 overflow-y-scroll'>
-      <table className='markers-table'>
+    <div className='h-64 overflow-y-scroll'>
+      <table className='border-collapse w-full text-sm'>
         <thead>
-          <tr>
-            <td></td>
-            <td>Latitude</td>
-            <td>Longitude</td>
-            <td></td>
-            <td></td>
-            <td></td>
+          <tr className='bg-gray-100'>
+            <td className='border border-gray-400 p-1 w-6'></td>
+            <td className='border border-gray-400 p-1 font-semibold'>
+              Latitude
+            </td>
+            <td className='border border-gray-400 p-1 font-semibold'>
+              Longitude
+            </td>
+            <td className='border border-gray-400 p-1 w-8'></td>
+            <td className='border border-gray-400 p-1 w-8'></td>
+            <td className='border border-gray-400 p-1 w-8'></td>
           </tr>
         </thead>
         <tbody>
           {markers?.length > 0 &&
             markers.map((marker: ICoordinate, index: number) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td className='text-sm'>{marker.lat}</td>
-                <td className='text-sm'>{marker.lng}</td>
+              <tr key={index} className='m-0 p-0'>
+                <td className='border border-gray-400 p-1 text-center'>
+                  {index + 1}
+                </td>
                 <td
-                  className={`${index === 0 ? 'disabled' : 'hover'}`}
+                  className='border border-gray-400 p-1 text-sm'
+                  title={`${marker.lat}`}
+                >
+                  {marker.lat.toFixed(5)}
+                </td>
+                <td
+                  className='border border-gray-400 p-1 text-sm'
+                  title={`${marker.lng}`}
+                >
+                  {marker.lng.toFixed(5)}
+                </td>
+
+                <td
+                  className={`border border-gray-400 p-1 text-center ${
+                    index === 0
+                      ? 'text-gray-300 cursor-default'
+                      : 'text-black hover:text-blue-600 cursor-pointer'
+                  }`}
                   onClick={
                     index > 0 ? () => moveMarker(index, 'up') : undefined
                   }
                 >
-                  <ArrowUp className='markers-cell-up' />
+                  <ArrowUp size={16} />
                 </td>
+
                 <td
-                  className={`${
-                    index === markers.length - 1 ? 'disabled' : 'hover'
+                  className={`border border-gray-400 p-1 text-center ${
+                    index === markers.length - 1
+                      ? 'text-gray-300 cursor-default'
+                      : 'text-black hover:text-blue-600 cursor-pointer'
                   }`}
                   onClick={
                     index < markers.length - 1
@@ -49,13 +72,14 @@ const MarkersTable = ({
                       : undefined
                   }
                 >
-                  <ArrowDown className='markers-cell-down' />
+                  <ArrowDown size={16} />
                 </td>
+
                 <td
+                  className='border border-gray-400 p-1 text-center text-black hover:text-blue-600 cursor-pointer'
                   onClick={() => removeMarker(index)}
-                  className='remove-marker hover'
                 >
-                  <Trash2 size='16' className='markers-cell-delete' />
+                  <Trash2 size={16} />
                 </td>
               </tr>
             ))}

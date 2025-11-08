@@ -182,15 +182,15 @@ const EventMap = () => {
     <>
       <Search updateLocation={updateLocation} />
       <div
-        className={`p-2 border-1 border-e-indigo-900 rounded-1xl mt-3 grid grid-cols-[2fr_1fr] gap-2`}
+        className={`p-2 border-1 border-e-blue-900 rounded-1xl mt-3 grid grid-cols-[4fr_1fr] gap-2 h-full`}
       >
         {location && (
           <Map
             // @ts-ignore
             center={location}
             zoom={20}
-            style={{ height: '50vh' }}
             editable={true}
+            className='h-100'
           >
             <RecenterMap center={location} />
             <ClickToAddMarkers onMapClick={handleMapClick} />
@@ -219,7 +219,7 @@ const EventMap = () => {
           </Map>
         )}
         {componentHasMounted && (
-          <div className='w-115 p-2 bg-gray-100'>
+          <div className='w-75 p-2 bg-gray-100'>
             <div className='flex items-center gap-1 mt-2'>
               <button
                 onClick={onCalculate}

@@ -126,7 +126,9 @@ const Login: React.FC = () => {
           >
             Login
           </button>
-          {submitting && <LoaderCircle className={DEFAULT_SPINNER} />}
+          {submitting && (
+            <LoaderCircle className={`${DEFAULT_SPINNER} w-full mt-2`} />
+          )}
         </div>
 
         <div>

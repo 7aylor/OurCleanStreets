@@ -1,5 +1,4 @@
 import { Link, useNavigate } from 'react-router-dom';
-import './Navbar.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { OCS_API_URL } from '../../helpers/constants';
 import { logout } from '../../store/authSlice';
@@ -10,14 +9,12 @@ const Navbar = () => {
   const loggedIn = useSelector((state: RootState) => !!state.auth.accessToken);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
   const onLogout = async () => {
     const logoutUrl = `${OCS_API_URL}/auth/logout`;
-
     try {
-      let response = await fetch(logoutUrl, {
+      const response = await fetch(logoutUrl, {
         method: 'POST',
         credentials: 'include',
       });
@@ -34,18 +31,27 @@ const Navbar = () => {
   };
 
   return (
-    <div className='navbar'>
-      <h1>
+    <div
+      className='
+        flex justify-between items-center
+        h-[60px] px-2
+        bg-green-800 text-white border-b-2 border-green-900
+        font-[Verdana] font-light
+      '
+    >
+      <h1 className='font-thin'>
         <Link to='/' className='m-2 hover:text-gray-300'>
           OurCleanStreets
         </Link>
       </h1>
-      <div className='flex'>
+
+      <div className='flex items-center'>
         {!loggedIn && (
           <Link to='/login' className='m-2 hover:text-gray-300'>
             Login
           </Link>
         )}
+
         {loggedIn && (
           <>
             <Link to='/dashboard' className='m-2 hover:text-gray-300'>
@@ -54,7 +60,11 @@ const Navbar = () => {
             <Link to='/activities' className='m-2 hover:text-gray-300'>
               Activities
             </Link>
-            <div onMouseLeave={() => setShowProfileDropdown(false)}>
+
+            <div
+              className='relative inline-block'
+              onMouseLeave={() => setShowProfileDropdown(false)}
+            >
               <Link
                 to='/user-profile'
                 className='m-2 hover:text-gray-300 inline-block'
@@ -64,28 +74,28 @@ const Navbar = () => {
               </Link>
 
               {showProfileDropdown && (
-                <div className='absolute right-0 w-40 bg-white text-gray-800 rounded-md shadow-lg z-50'>
+                <div
+                  className='
+                    absolute right-0
+                    w-40 bg-white text-gray-800
+                    rounded-md shadow-lg z-50
+                  '
+                >
                   <Link
                     to='/reset-password'
-                    className='block px-4 py-2 hover:bg-gray-100'
+                    className='block px-4 py-2 hover:bg-green-200 hover:rounded-t-md'
                   >
                     Reset Password
                   </Link>
                   <button
                     onClick={onLogout}
-                    className='block w-full text-left px-4 py-2 hover:bg-gray-100'
+                    className='block w-full text-left px-4 py-2 hover:bg-green-200 hover:rounded-b-md hover:cursor-pointer'
                   >
                     Logout
                   </button>
                 </div>
               )}
             </div>
-            {/* <button
-              onClick={onLogout}
-              className='m-2 hover:text-gray-300 hover:cursor-pointer'
-            >
-              Logout
-            </button> */}
           </>
         )}
       </div>

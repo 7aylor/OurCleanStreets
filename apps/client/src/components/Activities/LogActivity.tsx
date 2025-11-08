@@ -65,7 +65,7 @@ const LogActivity = () => {
 
   return (
     <div>
-      <h1 className={DEFAULT_H1}>Log Cleanup Activity</h1>
+      <h1 className={`${DEFAULT_H1} mb-2`}>Log Cleanup Activity</h1>
       <form>
         <div>
           <EventMap />

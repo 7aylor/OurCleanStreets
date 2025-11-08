@@ -12,7 +12,7 @@ function Welcome() {
   };
 
   return (
-    <div className='flex items-center justify-center min-h-screen bg-gradient-to-br to-blue-100'>
+    <div className='-m-4 flex items-center justify-center min-h-screen bg-gradient-to-br to-blue-100'>
       <div className='text-center max-w-lg p-8 bg-white/80 backdrop-blur rounded-2xl shadow-lg'>
         <h1 className='text-4xl md:text-5xl font-extrabold text-gray-800 mb-4'>
           Welcome to <span className='text-green-600'>Our Clean Streets!</span>

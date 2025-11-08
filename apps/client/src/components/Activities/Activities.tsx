@@ -62,12 +62,12 @@ const Activities: React.FC = () => {
   return (
     <div>
       <h1 className={DEFAULT_H1}>Your Cleanup Activities</h1>
-      <div>
+      <div className='flex items-center'>
         <button className={DEFAULT_BTN}>
           <Link to='/log-activity'>Log Activity</Link>
         </button>
+        {isLoading && <LoaderCircle className={`${DEFAULT_SPINNER} ml-2`} />}
       </div>
-      {isLoading && <LoaderCircle className={DEFAULT_SPINNER} />}
       {!isLoading && formattedActivities && formattedActivities.length > 0 && (
         <div className='overflow-x-auto mt-3'>
           <table className='table-auto w-full border-collapse'>
