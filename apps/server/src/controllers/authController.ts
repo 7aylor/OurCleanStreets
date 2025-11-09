@@ -56,11 +56,14 @@ export const login = async (
       });
     }
 
+    const domain = `.${process.env.DOMAIN}`;
+
     // Send refresh token in httpOnly cookie
     res.cookie('refreshToken', refreshToken.token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: 'none',
+      domain,
       expires: refreshToken.expiresAt,
       path: '/auth',
     });
@@ -154,11 +157,14 @@ export const signup = async (
       });
     }
 
+    const domain = `.${process.env.DOMAIN}`;
+
     // Send refresh token in httpOnly cookie
     res.cookie('refreshToken', refreshToken.token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: 'none',
+      domain,
       expires: refreshToken.expiresAt,
       path: '/auth',
     });
@@ -226,10 +232,13 @@ export const logout = async (
     if (token) {
       const prisma = getPrismaClient();
       await prisma.refreshToken.deleteMany({ where: { token } });
+
+      const domain = `.${process.env.DOMAIN}`;
       res.clearCookie('refreshToken', {
         httpOnly: true,
         secure: true,
-        sameSite: 'strict',
+        sameSite: 'none',
+        domain,
         path: '/auth',
       });
     }

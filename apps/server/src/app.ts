@@ -14,6 +14,11 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
   'https://agreeable-forest-01a6d8e0f.2.azurestaticapps.net',
+  'ourcleanstreets.quest',
+  'www.ourcleanstreets.quest',
+  'https://ourcleanstreets.quest',
+  'https://api.ourcleanstreets.quest',
+  'https://www.ourcleanstreets.quest',
 ];
 
 app.use(express.json());
