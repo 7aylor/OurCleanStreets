@@ -56,8 +56,9 @@ const LogActivity = () => {
     }
   };
 
-  const onActivityDateChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setActivityDate(e.target.value);
+  const onActivityDateChange = (date: string) => {
+    setActivityDate(date);
+  };
   const onMostCommonItemChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setMostCommonItem(e.target.value);
   const onTrashWeightChange = (e: React.ChangeEvent<HTMLInputElement>) =>

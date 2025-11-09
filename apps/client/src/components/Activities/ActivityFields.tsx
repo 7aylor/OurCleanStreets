@@ -3,6 +3,8 @@ import {
   DEFAULT_INPUT,
   DEFAULT_INPUT_LABEL,
 } from '../../helpers/style-contants';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const ActivityFields = ({
   activityDate,
@@ -19,7 +21,7 @@ const ActivityFields = ({
   duration?: number;
   distance?: number;
   events?: {
-    activityDateChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    activityDateChange: (date: string) => void;
     mostCommonItemChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     trashWeightChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   };
@@ -29,13 +31,18 @@ const ActivityFields = ({
     <div className='grid grid-cols-5 gap-3 mt-3'>
       <div>
         <label className={DEFAULT_INPUT_LABEL}>Date:</label>
-        <input
-          type={activityDate ? 'text' : 'date'}
-          onChange={events && events.activityDateChange}
-          className={DEFAULT_INPUT}
-          value={activityDate ?? ''}
+
+        <DatePicker
+          selected={activityDate ? new Date(activityDate) : new Date()}
+          onChange={(date: Date | null) => {
+            if (date && events) events.activityDateChange(date.toDateString());
+          }}
+          maxDate={new Date()}
+          className={`${DEFAULT_INPUT} m-0`}
           disabled={readonly}
-          max={new Date().toISOString().split('T')[0]}
+          placeholderText='Select a date'
+          dateFormat='yyyy-MM-dd'
+          popperClassName='ml-10'
         />
       </div>
       <div>

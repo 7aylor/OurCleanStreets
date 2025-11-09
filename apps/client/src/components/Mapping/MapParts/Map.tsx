@@ -21,7 +21,7 @@ const Map: React.FC<IMapProps> = ({
       // @ts-ignore
       center={center}
       zoom={zoom}
-      style={style}
+      style={{ zIndex: 0, ...style }}
       scrollWheelZoom={editable}
       dragging={editable}
       doubleClickZoom={editable}
