@@ -98,8 +98,8 @@ const Achievements: React.FC = () => {
 
   return (
     <div>
-      <h1 className='text-4xl text-center'>Achievements</h1>
-      <div className='flex justify-center'>
+      <h1 className='text-4xl text-center mb-6'>Achievements</h1>
+      <div className='flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4'>
         {achievements &&
           achievements?.map((achievement) => (
             <Badge key={achievement.type} {...achievement} />
