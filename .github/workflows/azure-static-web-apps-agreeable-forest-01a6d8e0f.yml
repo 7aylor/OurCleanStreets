@@ -27,7 +27,7 @@ jobs:
           pnpm -F @ocs/types build
           pnpm -F ocs-client build
         env:
-          VITE_OCS_API_URL: https://ocs-server.ashybay-482f42bc.eastus2.azurecontainerapps.io
+          VITE_OCS_API_URL: https://api.ourcleanstreets.quest
 
       - name: Copy SWA config
         run: cp apps/client/staticwebapp.config.json apps/client/dist/
