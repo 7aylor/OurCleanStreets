@@ -3,6 +3,8 @@ import { Badge } from './Badge';
 import { useQuery } from '@tanstack/react-query';
 import { OCS_API_URL } from '../../../helpers/constants';
 import { useAuthenticatedFetch } from '../../../hooks/useAuthenticateFetch';
+import { LoaderCircle } from 'lucide-react';
+import { DEFAULT_SPINNER } from '../../../helpers/style-contants';
 
 const Achievements: React.FC = () => {
   const authenticatedFetch = useAuthenticatedFetch();
@@ -84,7 +86,7 @@ const Achievements: React.FC = () => {
   //   setAchievements(acs);
   // }, []);
 
-  const { data: achievements } = useQuery({
+  const { data: achievements, isLoading } = useQuery({
     queryKey: ['user-stats'],
     queryFn: async () => {
       const statsUrl = `${OCS_API_URL}/activity/get-user-stats`;
@@ -100,6 +102,9 @@ const Achievements: React.FC = () => {
     <div>
       <h1 className='text-4xl text-center mb-6'>Achievements</h1>
       <div className='flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4'>
+        {isLoading && (
+          <LoaderCircle className={`${DEFAULT_SPINNER} w-full mt-2`} />
+        )}
         {achievements &&
           achievements?.map((achievement) => (
             <Badge key={achievement.type} {...achievement} />
