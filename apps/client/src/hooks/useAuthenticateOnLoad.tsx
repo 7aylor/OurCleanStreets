@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { login, logout } from '../store/authSlice';
+import { loading, login, logout } from '../store/authSlice';
 import { OCS_API_URL } from '../helpers/constants';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,6 +15,7 @@ export const useAuthenticateOnLoad = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        dispatch(loading(true));
         const res = await fetch(`${OCS_API_URL}/auth/refresh`, {
           method: 'POST',
           credentials: 'include',
@@ -38,6 +39,8 @@ export const useAuthenticateOnLoad = () => {
       } catch (e) {
         console.error('Auth check failed', e);
         dispatch(logout());
+      } finally {
+        dispatch(loading(false));
       }
     };
 

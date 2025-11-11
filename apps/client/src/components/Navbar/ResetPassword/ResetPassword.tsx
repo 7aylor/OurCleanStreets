@@ -63,7 +63,7 @@ const ResetPassword = () => {
         setResetPasswordStatus(() => data?.message);
       } else {
         const data = await response.json();
-        console.error('Login failed:', data);
+        console.error('Error:', data);
         if (data.success === false && data.message) {
           setResetPasswordStatus(data.message);
         }

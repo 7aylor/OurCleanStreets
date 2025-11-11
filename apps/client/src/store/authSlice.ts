@@ -6,6 +6,7 @@ interface AuthState {
   userId: string | null;
   username: string | null;
   zipcode: string | null;
+  loading: boolean | null;
 }
 
 const initialState: AuthState = {
@@ -14,13 +15,16 @@ const initialState: AuthState = {
   userId: null,
   username: null,
   zipcode: null,
+  loading: true,
 };
+
+type LoginPayload = Omit<AuthState, 'loading'>;
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<AuthState>) => {
+    login: (state, action: PayloadAction<LoginPayload>) => {
       state.accessToken = action.payload.accessToken;
       state.email = action.payload.email;
       state.userId = action.payload.userId;
@@ -34,8 +38,11 @@ const authSlice = createSlice({
       state.username = null;
       state.zipcode = null;
     },
+    loading: (state, action) => {
+      state.loading = action.payload;
+    },
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, loading } = authSlice.actions;
 export default authSlice.reducer;

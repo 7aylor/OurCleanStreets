@@ -136,7 +136,7 @@ const Login: React.FC = () => {
             Not a member?{' '}
             <a
               onClick={onSignup}
-              className='font-semibold text-indigo-600 hover:cursor-pointer mt-[10px] inline-block'
+              className='font-semibold text-green-600 hover:cursor-pointer mt-[10px] inline-block'
             >
               Sign Up
             </a>
