@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import type { RootState } from '../store/store';
 
-function Welcome() {
+const Welcome = () => {
   const navigate = useNavigate();
 
   const loggedIn = useSelector((state: RootState) => state.auth.accessToken);
@@ -32,6 +32,6 @@ function Welcome() {
       </div>
     </div>
   );
-}
+};
 
 export default Welcome;

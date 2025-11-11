@@ -31,7 +31,7 @@ const Navbar = () => {
   };
 
   return (
-    <div
+    <nav
       className='
         flex justify-between items-center
         h-[60px] px-2
@@ -39,11 +39,12 @@ const Navbar = () => {
         font-[Verdana] font-light
       '
     >
-      <h1 className='font-thin'>
-        <Link to='/' className='m-2 hover:text-gray-300'>
-          OurCleanStreets
+      <div className='font-thin '>
+        <Link to='/' className='m-2 hover:opacity-80 text-xl flex items-center'>
+          <img src='/earth.png' height='40px' width='40px' className='mr-2' />
+          <span>OurCleanStreets</span>
         </Link>
-      </h1>
+      </div>
 
       <div className='flex items-center'>
         {!loggedIn && (
@@ -99,7 +100,7 @@ const Navbar = () => {
           </>
         )}
       </div>
-    </div>
+    </nav>
   );
 };
 
