@@ -2,7 +2,7 @@ export const DEFAULT_BTN =
   'bg-green-800 text-white py-2 px-4 rounded-lg transition duration-200 cursor-pointer hover:bg-green-700';
 
 export const DEFAULT_BTN_DISABLED =
-  'bg-green-500 text-white py-2 px-4 rounded-lg ';
+  'bg-green-600 text-gray-300 py-2 px-4 rounded-lg ';
 
 export const DEFAULT_H1 =
   'text-3xl font-bold text-gray-900 tracking-tight text-center';

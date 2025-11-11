@@ -64,6 +64,17 @@ const About = () => {
             created by Freepik - Flaticon
           </li>
           <li>
+            All other icons by ©{' '}
+            <Link
+              to='https://lucide.dev/icons/'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='text-green-600 hover:underline'
+            >
+              Lucide Contributors
+            </Link>
+          </li>
+          <li>
             Map Routing powered by ©{' '}
             <Link
               to='https://openrouteservice.org/'
