@@ -134,9 +134,12 @@ export const getUserStats = async (req: Request, res: Response) => {
     const { hours, minutes, seconds } = getDurationParts(totalDuration);
 
     const miles = convertDistance(totalDistance, 'm');
+    const totalTime = hours + minutes / 60 + seconds / 60 / 60;
 
     const distanceConfig = distance.find((d) => miles > d.min && miles < d.max);
-    const durationConfig = duration.find((d) => hours > d.min && hours < d.max);
+    const durationConfig = duration.find(
+      (d) => totalTime > d.min && hours < d.max
+    );
     const weightConfig = weight.find(
       (w) => totalWeight > w.min && totalWeight < w.max
     );
