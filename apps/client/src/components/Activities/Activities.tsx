@@ -85,7 +85,7 @@ const Activities: React.FC = () => {
             <tbody>
               {formattedActivities.map((a) => (
                 <tr key={a.key} className='border-b'>
-                  <td className='px-4 py-2 hover:cursor-auto text-indigo-600'>
+                  <td className='px-4 py-2 hover:cursor-auto text-green-600'>
                     <Link to={`/activity-details/${a.id}`}>
                       {a.activityDate}
                     </Link>

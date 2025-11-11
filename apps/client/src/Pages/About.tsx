@@ -17,14 +17,34 @@ const About = () => {
             className='text-green-600 hover:underline'
           >
             Keep America Beautiful
-          </Link>{' '}
-          there are approximately 50 billion pieces of litter on the ground in
-          the US, roughly 152 pieces of litter per American, or 2605 pieces of
-          litter per mile of road and waterway in the country. OurCleanStreets
-          aims to empower communities to work together to tackle the litter
-          epidemic, one step at a time.
+          </Link>
+          , there are an estimated <strong>50 billion pieces of litter</strong>{' '}
+          on the ground across the United States — roughly{' '}
+          <strong>152 pieces per person</strong> or about{' '}
+          <strong>2,605 pieces per mile</strong> of road and waterway.{' '}
+          <span className='font-medium'>OurCleanStreets</span> empowers
+          communities to take collective action against this growing problem —
+          bringing people together to restore and protect the places they live,
+          work, and play.
         </p>
-        <p className='text-lg leading-relaxed'></p>
+
+        <p className='text-lg leading-relaxed'>
+          <span className='font-medium'>OurCleanStreets</span> was developed as
+          a student capstone project at{' '}
+          <Link
+            to='https://sites.google.com/asu.edu/goee-graduate-success-website/mse-es-software-engineering?authuser=0'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='text-[#8C1D40] font-bold hover:underline'
+          >
+            Arizona State University
+          </Link>
+          . While it strives to deliver a functional and high-quality
+          experience, it remains a work in progress and may not yet be fully
+          production-ready. As features continue to evolve, user data may not be
+          permanently retained. We appreciate your understanding and feedback as
+          the project grows.
+        </p>
       </section>
 
       <section>

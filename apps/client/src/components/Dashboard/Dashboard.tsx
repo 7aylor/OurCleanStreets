@@ -13,6 +13,7 @@ import { Check, Edit, LoaderCircle, X } from 'lucide-react';
 import FitMapToRoute from '../Mapping/MapParts/FitMapToRoute';
 import { getFormattedDistance, getFormattedDuration } from '@ocs/library';
 import { DEFAULT_SPINNER } from '../../helpers/style-contants';
+import Legend from '../Mapping/MapParts/Legend';
 
 type DashboardRoute = {
   coordinates: RouteCoordinate[];
@@ -240,6 +241,14 @@ const Dashboard: React.FC = () => {
           style={{ height: '60vh' }}
           zoom={16}
         >
+          <Legend
+            title='Last Cleaned'
+            items={[
+              { color: 'green', label: '0 - 3 months ago' },
+              { color: 'orange', label: '3 - 6 months ago' },
+              { color: 'red', label: '6+ months ago' },
+            ]}
+          />
           <FitMapToRoute
             route={routes.flatMap((r) => r.coordinates)}
             padding={[1, 1]}
