@@ -18,7 +18,7 @@ export const useRememberLastRoute = () => {
   // Restore on app load
   useEffect(() => {
     const lastRoute = localStorage.getItem('lastRoute');
-    if (lastRoute && lastRoute !== location.pathname) {
+    if (accessToken && lastRoute && lastRoute !== location.pathname) {
       navigate(lastRoute, { replace: true });
     }
   }, []);
