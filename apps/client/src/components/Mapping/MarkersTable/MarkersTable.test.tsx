@@ -23,11 +23,11 @@ describe('MarkersTable.ts', () => {
       />
     );
 
-    expect(screen.getByText('Lat: 1.23')).toHaveTextContent('Lat: 1.23');
-    expect(screen.getByText('Lat: 6.23')).toHaveTextContent('Lat: 6.23');
-    expect(screen.getByText('Lat: 3.23')).toHaveTextContent('Lat: 3.23');
-    expect(screen.getByText('Lng: 2.32')).toHaveTextContent('Lng: 2.32');
-    expect(screen.getByText('Lng: 4.32')).toHaveTextContent('Lng: 4.32');
-    expect(screen.getByText('Lng: 7.32')).toHaveTextContent('Lng: 7.32');
+    expect(screen.getByText('1.23')).toHaveTextContent('1.23');
+    expect(screen.getByText('6.23')).toHaveTextContent('6.23');
+    expect(screen.getByText('3.23')).toHaveTextContent('3.23');
+    expect(screen.getByText('2.32')).toHaveTextContent('2.32');
+    expect(screen.getByText('4.32')).toHaveTextContent('4.32');
+    expect(screen.getByText('7.32')).toHaveTextContent('7.32');
   });
 });

@@ -22,13 +22,18 @@ export async function createRefreshToken(userId: string) {
     const dayMs = 1000 * 60 * 60 * 24;
     const expiresAt = new Date(Date.now() + dayMs * 7);
 
-    await prisma.refreshToken.create({
+    const refreshToken = await prisma.refreshToken.create({
       data: {
         token,
         userId,
         expiresAt,
       },
     });
+
+    if (!refreshToken) {
+      console.log(`Failed to created refreshToken for user ${userId}`);
+      return;
+    }
 
     return { token, expiresAt };
   } catch (e) {

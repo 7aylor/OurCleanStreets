@@ -10,6 +10,13 @@ const MarkersTable = ({
   removeMarker: (index: number) => void;
   moveMarker: (index: number, dir: 'up' | 'down') => void;
 }) => {
+  function roundToDecimals(num: number, places: number = 1e5) {
+    const rounded = Math.round(num * places) / places;
+
+    // Convert to string without unnecessary trailing zeros
+    return parseFloat(rounded.toString());
+  }
+
   return (
     <div className='h-64 overflow-y-scroll'>
       <table className='border-collapse w-full text-sm'>
@@ -38,13 +45,13 @@ const MarkersTable = ({
                   className='border border-gray-400 p-1 text-sm'
                   title={`${marker.lat}`}
                 >
-                  {marker.lat.toFixed(5)}
+                  {roundToDecimals(marker.lat)}
                 </td>
                 <td
                   className='border border-gray-400 p-1 text-sm'
                   title={`${marker.lng}`}
                 >
-                  {marker.lng.toFixed(5)}
+                  {roundToDecimals(marker.lng)}
                 </td>
 
                 <td
