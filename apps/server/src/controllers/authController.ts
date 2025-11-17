@@ -218,7 +218,7 @@ export const refresh = async (
       zipcode: dbRefreshToken.user.zipcode,
     });
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(403).json({ errors: ['Invalid token'] });
   }
 };

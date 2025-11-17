@@ -30,6 +30,8 @@ export function authenticateJWT(
       userId: string;
     };
     req.userId = payload.userId;
+
+    // calls the next middleware in the middleware pipeline
     next();
   } catch (err) {
     return res.status(401).json({ message: 'Token expired or invalid' });

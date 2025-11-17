@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { getPrismaClient } from '../utils/prisma';
 import bcrypt from 'bcryptjs';
-import { loginSchema, passwordSchema } from '../utils/zod-schemas';
+import { passwordSchema } from '../utils/zod-schemas';
 
 export const resetPassword = async (req: Request, res: Response) => {
   try {

@@ -50,7 +50,8 @@ export const getRoute = async (
       coordinates: routeCoords,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error.' });
   }
 };
 
@@ -135,6 +136,7 @@ export const search = async (req: Request, res: Response) => {
       matches,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error.' });
   }
 };
