@@ -9,10 +9,11 @@ export default defineConfig({
     setupFiles: './src/setupTests.ts',
     testTimeout: 60000,
     hookTimeout: 60000,
+    pool: 'forks',
+    maxWorkers: 4, // this seems to work locally, but may need to adjust. 1 is slow but more stable
     coverage: {
       reporter: ['text', 'lcov'],
-      all: true,
-      include: ['src/**/*.{ts,tsx}'],
+      include: ['src/**/*.{ts,tsx}', '__tests__/**/*.{test}.{ts,tsx}'],
     },
   },
 });

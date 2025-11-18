@@ -21,5 +21,5 @@ export const useRememberLastRoute = () => {
     if (accessToken && lastRoute && lastRoute !== location.pathname) {
       navigate(lastRoute, { replace: true });
     }
-  }, []);
+  }, [accessToken, location.pathname, navigate]);
 };

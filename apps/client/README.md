@@ -1,4 +1,4 @@
-# OurCleanStreets
+# OurCleanStreets Client
 
 ## Deployment process
 
