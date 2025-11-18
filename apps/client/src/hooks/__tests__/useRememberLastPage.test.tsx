@@ -17,7 +17,6 @@ vi.mock('react-router-dom', async () => {
 
 describe('useRememberLastRoute', () => {
   let useSelectorMock: any;
-  let useNavigateMock: any;
   let useLocationMock: any;
 
   beforeEach(async () => {
@@ -26,8 +25,6 @@ describe('useRememberLastRoute', () => {
     const redux = await import('react-redux');
     useSelectorMock = redux.useSelector as unknown as ReturnType<typeof vi.fn>;
 
-    useNavigateMock = (await import('react-router-dom'))
-      .useNavigate as unknown as ReturnType<typeof vi.fn>;
     useLocationMock = (await import('react-router-dom'))
       .useLocation as unknown as ReturnType<typeof vi.fn>;
   });
