@@ -49,7 +49,7 @@ const About = () => {
 
       <section className='mb-4'>
         <h2 className='text-2xl font-semibold mb-2 text-gray-900'>Privacy</h2>
-        <p>
+        <p className='text-lg leading-relaxed'>
           Privacy is a core value of OurCleanStreets. We only collect the
           information you choose to share with us, and we use it solely to
           support the features you interact with. Your ZIP code is used only to
@@ -67,7 +67,7 @@ const About = () => {
         <h2 className='text-2xl font-semibold mb-2 text-gray-900'>
           Attributions
         </h2>
-        <ul className='list-disc pl-6 space-y-2 text-gray-700'>
+        <ul className='text-lg leading-relaxed list-disc pl-6 space-y-2 text-gray-700'>
           <li>
             <Link
               to='https://www.flaticon.com/free-icons/planet'
