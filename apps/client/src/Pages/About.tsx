@@ -7,7 +7,7 @@ const About = () => {
         About OurCleanStreets
       </h1>
 
-      <section className='mb-10'>
+      <section className='mb-4'>
         <p className='text-lg leading-relaxed mb-4'>
           According to a 2020 study by{' '}
           <Link
@@ -47,8 +47,24 @@ const About = () => {
         </p>
       </section>
 
+      <section className='mb-4'>
+        <h2 className='text-2xl font-semibold mb-2 text-gray-900'>Privacy</h2>
+        <p>
+          Privacy is a core value of OurCleanStreets. We only collect the
+          information you choose to share with us, and we use it solely to
+          support the features you interact with. Your ZIP code is used only to
+          connect you with a default community and is never used for tracking or
+          identification. Any route or location data is stored only for the
+          cleanup activities you explicitly create, and it is never collected
+          passively in the background. We are committed to keeping your
+          information secure, minimizing what we store, and being transparent
+          about how your data is used so you can confidently participate in
+          keeping your community clean without worrying about your data.
+        </p>
+      </section>
+
       <section>
-        <h2 className='text-2xl font-semibold mb-4 text-gray-900'>
+        <h2 className='text-2xl font-semibold mb-2 text-gray-900'>
           Attributions
         </h2>
         <ul className='list-disc pl-6 space-y-2 text-gray-700'>
