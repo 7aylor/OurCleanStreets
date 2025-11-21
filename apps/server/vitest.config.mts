@@ -8,8 +8,8 @@ export default defineConfig({
     hookTimeout: 60000,
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'lcov'],
-      include: ['src/**/*.test.{ts,tsx}'],
+      reporter: ['text-summary', 'text', 'html', 'lcov', 'json'],
+      include: ['src/**/*.{ts,tsx}'],
     },
   },
 });

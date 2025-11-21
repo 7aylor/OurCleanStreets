@@ -41,7 +41,13 @@ const Navbar = () => {
     >
       <div className='font-thin '>
         <Link to='/' className='m-2 hover:opacity-80 text-xl flex items-center'>
-          <img src='/earth.png' height='40px' width='40px' className='mr-2' />
+          <img
+            src='/earth.png'
+            height='40px'
+            width='40px'
+            className='mr-2'
+            alt='OurCleanStreets logo, a blue an green earth logo'
+          />
           <span>OurCleanStreets</span>
         </Link>
       </div>

@@ -12,7 +12,7 @@ export default defineConfig({
     pool: 'forks',
     maxWorkers: 4, // this seems to work locally, but may need to adjust. 1 is slow but more stable
     coverage: {
-      reporter: ['text', 'lcov'],
+      reporter: ['text-summary', 'text', 'html', 'lcov', 'json'],
       include: ['src/**/*.{ts,tsx}', '__tests__/**/*.{test}.{ts,tsx}'],
     },
   },
