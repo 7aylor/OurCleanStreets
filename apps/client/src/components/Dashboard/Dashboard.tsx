@@ -197,7 +197,7 @@ const Dashboard: React.FC = () => {
         <hr className='mb-4 border-gray-200' />
         <div className='grid grid-cols-3 gap-6 text-center'>
           <div className='bg-gray-100 rounded-xl p-4'>
-            <h3 className='text-sm font-medium text-gray-500 uppercase tracking-wide'>
+            <h3 className='text-sm font-medium text-gray-700 uppercase tracking-wide'>
               Trash Collected (lbs)
             </h3>
             {isLoading ? (
@@ -209,7 +209,7 @@ const Dashboard: React.FC = () => {
             )}
           </div>
           <div className='bg-gray-100 rounded-xl p-4'>
-            <h3 className='text-sm font-medium text-gray-500 uppercase tracking-wide'>
+            <h3 className='text-sm font-medium text-gray-700 uppercase tracking-wide'>
               Total Cleanup Time
             </h3>
             {isLoading ? (
@@ -221,7 +221,7 @@ const Dashboard: React.FC = () => {
             )}
           </div>
           <div className='bg-gray-100 rounded-xl p-4'>
-            <h3 className='text-sm font-medium text-gray-500 uppercase tracking-wide'>
+            <h3 className='text-sm font-medium text-gray-700 uppercase tracking-wide'>
               Total Cleanup Distance
             </h3>
             {isLoading ? (
