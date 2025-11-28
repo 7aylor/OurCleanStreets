@@ -65,10 +65,19 @@ All shared functions in the monorepo live here
 
 ## CI / CD
 
-## 🧑‍💻 Development Setup
+## 🧑‍💻 Local Development Setup
 
-### Prerequisites
+### Installation
 
-- Node.js 18+
-- pnpm 9+
-- PostgreSQL
+- Download and install the latest LTS version of[NodeJS](https://nodejs.org/en/download) for your Operating System
+- Install [pnpm](https://pnpm.io/installation)
+- Download or clone the github repo for [OCS](https://github.com/7aylor/OurCleanStreets) `git clone https://github.com/7aylor/OurCleanStreets.git`
+- Copy the provided .env files into their respective application root folders. These are environment variables that the application needs at runtime.
+- cd into the OCS directory `cd /my/files/ocs`
+- At the root of the OCS project, run `pnpm install`
+- cd into the OCS server directory `cd ocs/apps/server`
+- run `pnpm start`
+- in another terminal window, cd into the OCS client directory `cd /ocs/apps/client`
+- run `pnpm start`
+- Open a web browser and navigate to [http://localhost:5173/](http://localhost:5173/)
+- Use the application

@@ -16,7 +16,7 @@ const LogActivity = () => {
 
   const [saveResult, setSaveResult] = useState('');
 
-  const [activityDate, setActivityDate] = useState('');
+  const [activityDate, setActivityDate] = useState(new Date().toString());
   const [mostCommonItem, setMostCommonItem] = useState('');
   const [trashWeight, setTrashWeight] = useState(0);
   const authenticatedFetch = useAuthenticatedFetch();
